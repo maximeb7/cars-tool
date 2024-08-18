@@ -1,21 +1,17 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import {Head, usePage} from '@inertiajs/vue3';
 import {data} from "autoprefixer";
-import { ref } from "vue";
 import {onMounted} from "vue";
 
-const userInformations = ref({});
-
-
 onMounted(() => {
-    getUserInformations() // <div>
+    const userId = localStorage.getItem('userId')
+
+    if (userId) {
+        console.log(userId, 'ininin')
+        //TODO make my api call right here
+    }
 });
-
-const getUserInformations =  () => {
-    console.log("UserInformations", userInformations.value);
-};
-
 </script>
 
 <template>

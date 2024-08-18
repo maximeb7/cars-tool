@@ -41,10 +41,10 @@ class AuthenticatedSessionController extends Controller
         if ($request->wantsJson()) {
             return response()->json([
                 'token' => $token,
-                'redirect_url' => route('dashboard', [], false)
+                'redirect_url' => route('dashboard', [], false),
+                'user' => $user,
             ]);
         }
-        dd('ici');
 
         return redirect()->intended(route('dashboard', [], false));
     }

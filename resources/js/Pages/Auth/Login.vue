@@ -37,14 +37,13 @@ const submit = async () => {
     try {
         const response = await axios.post(route('login'), form.data());
 
-        // Supposons que le token et l'URL de redirection sont dans response.data
         const token = response.data.token;
         const redirectUrl = response.data.redirect_url;
+        const userId = response.data.user?.id
 
-        // Stocker le token dans le local storage
         localStorage.setItem('authToken', token);
+        localStorage.setItem('userId', userId);
 
-        // Rediriger l'utilisateur
         router.visit(redirectUrl);
     } catch (error) {
         if (error.response && error.response.data) {
