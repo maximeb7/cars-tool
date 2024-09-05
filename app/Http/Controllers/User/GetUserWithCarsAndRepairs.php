@@ -26,6 +26,7 @@ class GetUserWithCarsAndRepairs extends Controller
         $query = new GetUserWithCarsAndRepairsQuery($id);
         $user = $this->handler->handle($query);
 
+
         if (!$user) {
             return response()->json(['message' => 'User not found'], 404);
         }
