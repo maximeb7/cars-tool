@@ -1,14 +1,17 @@
-import axios from "axios";
+import ApiService from '../ApiService';
+
 const getUserInformations = async (userId) => {
+    console.log('en entree')
     try {
-        const response = await axios.get(route('user-infos'));
+        const response = await ApiService.get(`/user-informations/${userId}`);
 
-        // TODO vérifier la data avec un dtos ou un presenter
-        const responseData =  response.data;
+        const responseData = response.data;
 
-        //TODO SET ENSUITE Lobject dans le local storage
-        localStorage.setItem("userInfos", responseData)
+        localStorage.setItem("userInfos", JSON.stringify(responseData));
+        return responseData
     } catch (error) {
-
+        console.error('Erreur lors de la récupération des informations utilisateur:', error);
     }
-}
+};
+
+export default getUserInformations;
