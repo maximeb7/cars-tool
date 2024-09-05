@@ -2,19 +2,21 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Cars extends Model
+class Car extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $table = 'cars';
 
     protected $fillable = [
+        'user_id',
         'brand_id',
         'model',
         'year',
@@ -34,11 +36,21 @@ class Cars extends Model
 
     protected function brand(): BelongsTo
     {
-        return $this->belongsTo(Brands::class);
+        return $this->belongsTo(Brand::class);
+    }
+
+    public function getBrandName(): ?string
+    {
+        return $this->brand->name;
     }
 
     protected function repairs(): HasMany
     {
-        return $this->hasMany(Repairs::class);
+        return $this->hasMany(Repair::class);
+    }
+
+    public function getRepairs(): Collection
+    {
+        return $this->repairs;
     }
 }

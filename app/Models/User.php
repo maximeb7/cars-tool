@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -49,6 +50,19 @@ class User extends Authenticatable
 
     public function cars(): HasMany
     {
-        return $this->hasMany(Cars::class);
+        return $this->hasMany(Car::class);
+    }
+
+
+    public function getCars(): Collection
+    {
+        return $this->cars;
+    }
+
+    public function getCarsAndRepairs()
+    {
+        $query = $this->getCars();
+        dump('777777777');
+        dd($this);
     }
 }

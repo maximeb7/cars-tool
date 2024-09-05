@@ -7,19 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Brands extends Model
+class RepairType extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'brands';
+    protected $table = 'repair_types';
 
     protected $fillable = [
         'name'
     ];
 
-
-    public function cars(): HasMany
+    public function repairs(): HasMany
     {
-        return $this->hasMany(Cars::class);
+        return $this->hasMany(Repair::class);
     }
 }

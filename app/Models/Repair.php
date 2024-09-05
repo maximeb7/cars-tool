@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Repairs extends Model
+class Repair extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $table = 'repairs';
     protected $fillable = [
+        'id',
         'car_id',
         'repair_type_id',
         'price',
@@ -33,13 +34,18 @@ class Repairs extends Model
 
     public function car(): BelongsTo
     {
-        return $this->belongsTo(Cars::class);
+        return $this->belongsTo(Car::class);
     }
 
 
     public function repairType(): BelongsTo
     {
-        return $this->belongsTo(RepairTypes::class);
+        return $this->belongsTo(RepairType::class);
+    }
+
+    public function getRepairTypeNAme(): ?string
+    {
+        return $this->repairType->name;
     }
 
 
