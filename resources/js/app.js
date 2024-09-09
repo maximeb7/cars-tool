@@ -11,6 +11,8 @@ import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
+import '@mdi/font/css/materialdesignicons.css'
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -27,7 +29,9 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
-            .use(vuetify)
+            .use(vuetify, {
+                iconfont: 'mdi'
+            })
             .mount(el);
     },
     progress: {
