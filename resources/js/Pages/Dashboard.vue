@@ -3,6 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { onMounted, ref } from 'vue';
 import getUserInformations from '@/Services/User/getUserInformations.js';
+import CarsList from "@/Components/Cars/CarsList.vue";
 
 const userInformations = ref(null);
 const carsAndRepairs = ref([])
@@ -52,36 +53,7 @@ const fetchUserInformations = async (userId) => {
             </div>
         </v-card>
 
-
-<!--    TODO créer un composant-->
-        <v-card class="m-5 mt-5" elevation="1" border="rounded">
-            <h1 class="vehicles-title">Mes véhicules</h1>
-            <v-table>
-                <thead>
-                <tr>
-                    <th class="text-left">
-                        Marque
-                    </th>
-                    <th class="text-left">
-                        Modèle
-                    </th>
-                    <th class="text-left">
-                        Année
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr
-                    v-for="item in carsAndRepairs"
-                    :key="item.name"
-                >
-                    <td>{{ item.brandName }}</td>
-                    <td>{{ item.model }}</td>
-                    <td>{{ item.year }}</td>
-                </tr>
-                </tbody>
-            </v-table>
-        </v-card>
+        <cars-list :cars-and-repairs="carsAndRepairs"/>
 
 <!--        <div  v-if="carsAndRepairs.length > 0" class="py-1 " style="position: static">-->
 <!--            <div class="max-w-10xl mx-auto sm:px-6 lg:px-8">-->
