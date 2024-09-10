@@ -55,4 +55,70 @@ class RepairDto
             return self::fromEntity($repairEntity);
         }, $repairs instanceof Collection ? $repairs->all() : $repairs);
     }
+
+    public static function formatAllTypesForStats(array $repairsDto): array
+    {
+        $groupedData = collect($repairsDto)
+            ->groupBy('repairTypeName')
+            ->map(function ($group) {
+                $totalCost = $group->sum('price');
+
+                $randomColor = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
+
+                return [
+                    'total' => $totalCost,
+                    'color' => $randomColor,
+                ];
+            });
+
+        $labels = $groupedData->keys()->toArray();
+        $data = $groupedData->pluck('total')->toArray();
+        $colors = $groupedData->pluck('color')->toArray();
+
+        return [
+            'labels' => $labels,
+            'datasets' => [
+                [
+                    'label' => '€',
+                    'backgroundColor' => $colors,
+                    'data' => $data,
+                ]
+            ]
+        ];
+    }
+
+    public static function formatAllMonthsForStats(array $repairsDto): array
+    {
+
+        $groupedData = collect($repairsDto)
+            ->groupBy(function ($repair) {
+                return date('Y-m', strtotime($repair->date));
+            })
+            ->map(function ($group, $month) {
+                $totalCost = $group->sum('price');
+
+                return [
+                    'total' => $totalCost,
+                ];
+            });
+
+        $months = $groupedData->keys()->sort()->map(function ($month) {
+            return date('F', strtotime($month . '-01'));
+        })->toArray();
+
+        $data = $groupedData->pluck('total')->toArray();
+
+        $backgroundColor = '#f87979';
+
+        return [
+            'labels' => $months,
+            'datasets' => [
+                [
+                    'label' => 'Fluctuation des dépenses',
+                    'backgroundColor' => $backgroundColor,
+                    'data' => $data,
+                ]
+            ]
+        ];
+    }
 }

@@ -23,9 +23,10 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale,PointEl
 const userInformations = ref(null);
 const carsAndRepairs = ref([])
 const doughnutDataLabels = ref({
-    labels: ['VueJs', 'EmberJs', 'ReactJs', 'AngularJs'],
+    labels: ['Pneus', 'Révision', 'Vidange', 'Freinage'],
     datasets: [
         {
+            label: "€",
             backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
             data: [40, 20, 80, 10]
         }
@@ -102,6 +103,7 @@ const fetchUserInformations = async (userId) => {
 
         <v-row class="ma-4">
             <v-col cols="12" sm="6">
+                Types de dépenses
                 <v-card class="py-3">
                     <Doughnut :data="doughnutDataLabels" :options="doughnutDataOptions"/>
                 </v-card>

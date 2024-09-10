@@ -8,6 +8,7 @@ use App\Application\Queries\Repairs\GetAllRepairsQuery;
 use App\Http\Controllers\Controller;
 use App\Presenters\Dtos\RepairDto;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class GetAllRepairs extends Controller
@@ -18,7 +19,7 @@ class GetAllRepairs extends Controller
     {
     }
 
-    public function __invoke(int $id): JsonResponse|Response
+    public function __invoke(Request $request, int $id): JsonResponse|Response
     {
         $query = new GetAllRepairsQuery($id);
         $repairs = $this->handler->handle($query);
@@ -29,6 +30,22 @@ class GetAllRepairs extends Controller
 
         $repairsDto = RepairDto::fromCollection($repairs);
 
-        return response()->json($repairsDto);
+        $allByMonthForStats = $request->query('allByMonthForStats') === 'true';
+        $allTypesForStats = $request->query('allTypesForStats') === 'true';
+
+        if ($allByMonthForStats && $allTypesForStats) {
+            $result = [
+                'allByMonthForStats' => RepairDto::formatAllMonthsForStats($repairsDto),
+                'allTypesForStats' => RepairDto::formatAllTypesForStats($repairsDto),
+            ];
+        } elseif ($allByMonthForStats) {
+            $result = RepairDto::formatAllMonthsForStats($repairsDto);
+        } elseif ($allTypesForStats) {
+            $result = RepairDto::formatAllTypesForStats($repairsDto);
+        } else {
+            $result = $repairsDto;
+        }
+
+        return response()->json($result);
     }
 }
