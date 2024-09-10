@@ -4,9 +4,56 @@ import { Head } from '@inertiajs/vue3';
 import { onMounted, ref } from 'vue';
 import getUserInformations from '@/Services/User/getUserInformations.js';
 import CarsList from "@/Components/Cars/CarsList.vue";
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+    ArcElement,
+} from 'chart.js'
+import { Doughnut } from 'vue-chartjs';
+import { Line } from "vue-chartjs";
+
+ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale,PointElement,LineElement,Title)
 
 const userInformations = ref(null);
 const carsAndRepairs = ref([])
+const doughnutDataLabels = ref({
+    labels: ['VueJs', 'EmberJs', 'ReactJs', 'AngularJs'],
+    datasets: [
+        {
+            backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
+            data: [40, 20, 80, 10]
+        }
+    ]
+})
+
+const doughnutDataOptions = ref({
+        responsive: true,
+        maintainAspectRatio: false
+    }
+)
+
+const lineDataLabels = ref({
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    datasets: [
+        {
+            label: 'Data One',
+            backgroundColor: '#f87979',
+            data: [40, 39, 10, 40, 39, 80, 40]
+        }
+    ]
+})
+
+const lineDataOptions = ref({
+        responsive: true,
+        maintainAspectRatio: false
+    }
+)
 
 onMounted(async () => {
     const userId = localStorage.getItem('userId');
@@ -52,6 +99,24 @@ const fetchUserInformations = async (userId) => {
                 </div>
             </div>
         </v-card>
+
+        <v-row class="ma-4">
+            <v-col cols="12" sm="6">
+                <v-card class="py-3">
+                    <Doughnut :data="doughnutDataLabels" :options="doughnutDataOptions"/>
+                </v-card>
+            </v-col>
+            <v-col cols="12" sm="6">
+                <v-card class="py-3">
+                    <Line :data="lineDataLabels" :options="lineDataOptions"/>
+                </v-card>
+            </v-col>
+        </v-row>
+
+
+
+
+
 
         <cars-list :cars-and-repairs="carsAndRepairs"/>
 
