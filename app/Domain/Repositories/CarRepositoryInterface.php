@@ -7,4 +7,6 @@ use App\Domain\Entities\Car;
 interface CarRepositoryInterface
 {
     public function getCarsByUserId(int $userId): array;
+
+    public function getCarsIdByUserId(int $userId): array;
 }

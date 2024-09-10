@@ -27,4 +27,11 @@ class EloquentCarRepository implements CarRepositoryInterface
 
         return $cars;
     }
+
+public function getCarsIdByUserId(int $userId): array
+{
+    $eloquentCarsIds = EloquentCar::where('user_id', $userId)->select('id')->pluck('id')->toArray();
+
+    return $eloquentCarsIds;
+}
 }

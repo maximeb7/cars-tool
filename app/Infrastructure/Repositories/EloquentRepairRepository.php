@@ -5,6 +5,7 @@ namespace App\Infrastructure\Repositories;
 use App\Domain\Entities\Repair;
 use App\Domain\Repositories\RepairRepositoryInterface;
 use App\Models\Repair as EloquentRepair;
+use Illuminate\Database\Eloquent\Collection;
 
 class EloquentRepairRepository implements RepairRepositoryInterface
 {
@@ -27,5 +28,12 @@ class EloquentRepairRepository implements RepairRepositoryInterface
         }
 
         return $repairs;
+    }
+
+    public function getRepairsFromCarsId(array $carIds): Collection
+    {
+        $eloquentRepairsForCarsIds = EloquentRepair::whereIn('car_id', $carIds)->get();
+
+        return $eloquentRepairsForCarsIds;
     }
 }

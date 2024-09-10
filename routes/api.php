@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Repairs\GetAllRepairs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\GetUserWithCarsAndRepairs;
@@ -12,5 +13,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     } );
+
+    // USER ENDPOINTS
     Route::get('/user-informations/{id}', GetUserWithCarsAndRepairs::class);
+
+    //REPAIRS ENDPOINT
+
+    Route::get('/user-repairs/{id}', GetAllRepairs::class);
 });

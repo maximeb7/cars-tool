@@ -3,6 +3,7 @@
 namespace App\Presenters\Dtos;
 
 use App\Domain\Entities\Repair;
+use Illuminate\Database\Eloquent\Collection;
 
 class RepairDto
 {
@@ -31,5 +32,27 @@ class RepairDto
             $repair->price,
             $repair->date
         );
+    }
+
+
+    public static function fromModel(\App\Models\Repair $repairModel): Repair
+    {
+        return new Repair(
+            (int)$repairModel->id,
+            (int)$repairModel->car_id,
+            (int)$repairModel->repair_type_id,
+            $repairModel->getRepairTypeNAme() ? (string)$repairModel->getRepairTypeNAme() : null, // Exemple de conversion
+            (float)$repairModel->price,
+            (string)$repairModel->date,
+            $repairModel->is_planned_repair
+        );
+    }
+
+    public static function fromCollection(Collection|array $repairs): array
+    {
+        return array_map(function (\App\Models\Repair $repairModel) {
+            $repairEntity = self::fromModel($repairModel);
+            return self::fromEntity($repairEntity);
+        }, $repairs instanceof Collection ? $repairs->all() : $repairs);
     }
 }
