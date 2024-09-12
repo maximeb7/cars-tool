@@ -1,6 +1,6 @@
 import ApiService from '../ApiService';
 
-const getUserInformations = async (userUuid) => {
+export default async function  getUserInformations (userUuid)  {
     try {
         const response = await ApiService.get(`/user-informations/${userUuid}`);
         localStorage.setItem("userInfos", JSON.stringify(response.data));
@@ -11,4 +11,4 @@ const getUserInformations = async (userUuid) => {
     }
 };
 
-export default getUserInformations;
+

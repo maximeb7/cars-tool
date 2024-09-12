@@ -32,17 +32,17 @@
                 <v-divider></v-divider>
 
                 <v-list density="compact" nav>
-                    <v-list-item active-color="#08c97f" prepend-icon="mdi-home-city" title="Home" value="home"></v-list-item>
-                    <v-list-item active-color="#08c97f" prepend-icon="mdi-car-multiple" title="Mes véhicules" value="users">
+                    <v-list-item color="#08c97f" prepend-icon="mdi-home-city" title="Home" value="home"></v-list-item>
+                    <v-list-item color="#08c97f" prepend-icon="mdi-car-multiple" title="Mes véhicules" value="users">
                     </v-list-item>
-                    <v-list-item active-color="#08c97f" prepend-icon="mdi-cash-100" title="Dépenses" value="users">
+                    <v-list-item color="#08c97f" prepend-icon="mdi-cash-100" title="Dépenses" value="users">
                     </v-list-item>
-                    <v-list-item active-color="#08c97f" prepend-icon="mdi-car-wrench" title="Maintenances" value="account">
+                    <v-list-item color="#08c97f" prepend-icon="mdi-car-wrench" title="Maintenances" value="account">
                     </v-list-item>
 
-                    <v-list-item active-color="#08c97f" prepend-icon="mdi-account-circle-outline" title="Mon Profil" value="users" :href="route('profile.edit')">
+                    <v-list-item color="#08c97f" prepend-icon="mdi-account-circle-outline" title="Mon Profil" value="users" :href="route('profile.edit')">
                     </v-list-item>
-                    <v-list-item active-color="#08c97f" prepend-icon="mdi-logout" title="Déconnexion" value="users" href="#" onclick="event.preventDefault(); document.getElementById('post-form').submit();">
+                    <v-list-item color="#08c97f" prepend-icon="mdi-logout" title="Déconnexion" value="users" href="#" onclick="event.preventDefault(); document.getElementById('post-form').submit();">
                     </v-list-item>
                     <form id="post-form" :action="route('logout')" method="POST" style="display: none;">
                         <!-- Ajoutez ici vos champs de formulaire si nécessaire -->

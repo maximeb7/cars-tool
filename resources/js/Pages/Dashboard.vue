@@ -1,4 +1,5 @@
 <script setup>
+
 const props = defineProps({
     auth: Object
 });
@@ -7,6 +8,7 @@ import {Head, usePage} from '@inertiajs/vue3';
 import { onMounted, ref } from 'vue';
 import getUserInformations from '@/Services/User/getUserInformations.js';
 import getUserRepairs from "@/Services/User/getUserRepairs.js";
+import getUserRepairsGlobalStats from "@/Services/Stats/getUsersRepairsGlobalStats.js";
 import CarsList from "@/Components/Cars/CarsList.vue";
 import RepairsList from "@/Components/Repairs/RepairsList.vue";
 import {
@@ -28,6 +30,9 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale,PointEl
 const userInformations = ref(null);
 const carsAndRepairs = ref([])
 const repairs = ref([])
+const stats = ref([])
+const allByMonthForStats = ref(null)
+const allTypesForStats = ref(null)
 const doughnutDataLabels = ref({
     labels: ['Pneus', 'Révision', 'Vidange', 'Freinage'],
     datasets: [
@@ -69,6 +74,8 @@ onMounted(async () => {
     localStorage.setItem('userName', props.auth.user.name);
 
 
+
+
     if (!localStorage.getItem('authToken')) {
         const page = usePage();
         const token = page.props.flash.authToken;
@@ -85,7 +92,10 @@ onMounted(async () => {
     if (userUuid) {
         await fetchUserInformations(userUuid);
         await fetchUserRepairs(userUuid);
+        await fetchUserGlobalsStats(userUuid)
+
     }
+
 });
 
 const fetchUserInformations = async (userUuid) => {
@@ -107,10 +117,22 @@ const fetchUserRepairs = async (userUuid) => {
     try {
         const data = await getUserRepairs(userUuid);
         repairs.value = data;
-        console.log(repairs.value)
-
 
         localStorage.setItem("repairs", JSON.stringify(data));
+    } catch (error) {
+        console.error("Erreur lors de la récupération des réparations de l'utilisateur", error);
+    }
+}
+
+const fetchUserGlobalsStats = async (userUuid) => {
+    try {
+        const data = await getUserRepairsGlobalStats(userUuid);
+        stats.value = data;
+        allTypesForStats.value = stats.value.allTypesForStats
+        allByMonthForStats.value = stats.value.allByMonthForStats
+
+
+        localStorage.setItem("globalStats", JSON.stringify(data));
     } catch (error) {
         console.error("Erreur lors de la récupération des réparations de l'utilisateur", error);
     }
@@ -119,7 +141,7 @@ const fetchUserRepairs = async (userUuid) => {
 </script>
 
 <template>
-    <Head title="Dashboard" />
+    <Head title="Dashboard"/>
 
 
     <AuthenticatedLayout>
@@ -138,16 +160,16 @@ const fetchUserRepairs = async (userUuid) => {
         </v-card>
 
         <v-row class="ma-4">
-            <v-col cols="12" sm="6">
+            <v-col v-if="allTypesForStats" cols="12" sm="6">
                 <p class="mb-2">Types de dépenses</p>
                 <v-card class="py-3">
-                    <Doughnut :data="doughnutDataLabels" :options="doughnutDataOptions"/>
+                    <Doughnut :data="allTypesForStats" :options="doughnutDataOptions"/>
                 </v-card>
             </v-col>
-            <v-col cols="12" sm="6">
+            <v-col v-if="allByMonthForStats" cols="12" sm="6">
                 <p class="mb-2">Dépenses sur l'année</p>
                 <v-card class="py-3">
-                    <Line :data="lineDataLabels" :options="lineDataOptions"/>
+                    <Line :data="allByMonthForStats" :options="lineDataOptions"/>
                 </v-card>
             </v-col>
         </v-row>
@@ -155,45 +177,45 @@ const fetchUserRepairs = async (userUuid) => {
         <cars-list :cars-and-repairs="carsAndRepairs"/>
         <RepairsList :repairs="repairs"/>
 
-<!--        <div  v-if="carsAndRepairs.length > 0" class="py-1 " style="position: static">-->
-<!--            <div class="max-w-10xl mx-auto sm:px-6 lg:px-8">-->
-<!--                <v-row class="mt-5" v-for="car in carsAndRepairs">-->
-<!--                    <v-col cols="12" md="4">-->
-<!--                        <v-card rounded="xl" elevation="1" >-->
-<!--                            <v-card-title> {{ car.brandName }} {{car.model}}</v-card-title>-->
-<!--                            <v-img-->
-<!--                                border="opacity-50 sm"-->
-<!--                                max-width="mx-auto"-->
-<!--                                rounded="sm"-->
+        <!--        <div  v-if="carsAndRepairs.length > 0" class="py-1 " style="position: static">-->
+        <!--            <div class="max-w-10xl mx-auto sm:px-6 lg:px-8">-->
+        <!--                <v-row class="mt-5" v-for="car in carsAndRepairs">-->
+        <!--                    <v-col cols="12" md="4">-->
+        <!--                        <v-card rounded="xl" elevation="1" >-->
+        <!--                            <v-card-title> {{ car.brandName }} {{car.model}}</v-card-title>-->
+        <!--                            <v-img-->
+        <!--                                border="opacity-50 sm"-->
+        <!--                                max-width="mx-auto"-->
+        <!--                                rounded="sm"-->
 
-<!--                                class="ma-5"-->
-<!--                                alt="MyCarPicture"-->
-<!--                                src="/images/OpelAstra.jpg"-->
-<!--                                :width="410"-->
-<!--                                aspect-ratio="16/9"-->
-<!--                                cover-->
-<!--                            ></v-img>-->
-<!--                            <v-card-subtitle> Année {{ car.year}}</v-card-subtitle>-->
-<!--                            <v-card-text> Nombre de factures:  {{ car.repairs.length > 0 ? car.repairs.length : 0 }}</v-card-text>-->
-<!--                        </v-card>-->
-<!--                    </v-col>-->
-<!--                </v-row>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div  v-else  class="py-3">-->
-<!--            <div class="max-w-10xl mx-auto sm:px-6 lg:px-8">-->
-<!--                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">-->
-<!--                    <div class="p-6 text-gray-900">-->
-<!--                        <h2>Pas de véhicules enregistrées pour le momment</h2>-->
-<!--                        <p>Ajouter en une :</p>-->
-<!--                        <v-btn >-->
-<!--                            Ajouter une voiture-->
-<!--                        </v-btn>-->
+        <!--                                class="ma-5"-->
+        <!--                                alt="MyCarPicture"-->
+        <!--                                src="/images/OpelAstra.jpg"-->
+        <!--                                :width="410"-->
+        <!--                                aspect-ratio="16/9"-->
+        <!--                                cover-->
+        <!--                            ></v-img>-->
+        <!--                            <v-card-subtitle> Année {{ car.year}}</v-card-subtitle>-->
+        <!--                            <v-card-text> Nombre de factures:  {{ car.repairs.length > 0 ? car.repairs.length : 0 }}</v-card-text>-->
+        <!--                        </v-card>-->
+        <!--                    </v-col>-->
+        <!--                </v-row>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--        <div  v-else  class="py-3">-->
+        <!--            <div class="max-w-10xl mx-auto sm:px-6 lg:px-8">-->
+        <!--                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">-->
+        <!--                    <div class="p-6 text-gray-900">-->
+        <!--                        <h2>Pas de véhicules enregistrées pour le momment</h2>-->
+        <!--                        <p>Ajouter en une :</p>-->
+        <!--                        <v-btn >-->
+        <!--                            Ajouter une voiture-->
+        <!--                        </v-btn>-->
 
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
+        <!--                    </div>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
 
     </AuthenticatedLayout>
 </template>

@@ -1,7 +1,6 @@
 import ApiService from '../ApiService';
 
-const getUserRepairs = async (userUuid) => {
-    console.log('en entree')
+export default async function  getUserRepairs (userUuid) {
     try {
         const response = await ApiService.get(`/user-repairs/${userUuid}`);
 
@@ -12,4 +11,3 @@ const getUserRepairs = async (userUuid) => {
     }
 };
 
-export default getUserRepairs;

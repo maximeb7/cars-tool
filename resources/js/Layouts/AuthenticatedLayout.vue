@@ -7,7 +7,6 @@ const drawer = ref(true);
 const rail = ref(true);
 const drawerWidth = ref('40px')
 const onRailToggled = (isRail) => {
-    console.log('ici dans ma methode')
     rail.value = isRail;
     drawerWidth.value = isRail ? '40px' : '240px';
 }
