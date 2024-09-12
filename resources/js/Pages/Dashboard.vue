@@ -3,10 +3,12 @@ const props = defineProps({
     auth: Object
 });
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import {Head, usePage} from '@inertiajs/vue3';
 import { onMounted, ref } from 'vue';
 import getUserInformations from '@/Services/User/getUserInformations.js';
+import getUserRepairs from "@/Services/User/getUserRepairs.js";
 import CarsList from "@/Components/Cars/CarsList.vue";
+import RepairsList from "@/Components/Repairs/RepairsList.vue";
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -25,6 +27,7 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale,PointEl
 
 const userInformations = ref(null);
 const carsAndRepairs = ref([])
+const repairs = ref([])
 const doughnutDataLabels = ref({
     labels: ['Pneus', 'Révision', 'Vidange', 'Freinage'],
     datasets: [
@@ -61,18 +64,27 @@ const lineDataOptions = ref({
 
 
 onMounted(async () => {
-    const userId = localStorage.getItem('userId');
+    localStorage.setItem('userId', props.auth.user.id);
+    localStorage.setItem('userUuid', props.auth.user.uuid);
+    localStorage.setItem('userName', props.auth.user.name);
 
-    if (!userId) {
-        localStorage.setItem('userId', props.auth.user.id);
-        localStorage.setItem('userUuid', props.auth.user.uuid);
-        localStorage.setItem('userName', props.auth.user.name);
+
+    if (!localStorage.getItem('authToken')) {
+        const page = usePage();
+        const token = page.props.flash.authToken;
+
+
+        if (token) {
+            localStorage.setItem('authToken', token);
+        }
     }
+
 
     const userUuid = localStorage.getItem('userUuid');
 
-    if (userId) {
+    if (userUuid) {
         await fetchUserInformations(userUuid);
+        await fetchUserRepairs(userUuid);
     }
 });
 
@@ -80,7 +92,6 @@ const fetchUserInformations = async (userUuid) => {
     try {
         const data = await getUserInformations(userUuid);
         userInformations.value = data;
-        console.log(userInformations.value)
 
         if (data.cars.length > 0) {
             carsAndRepairs.value = data.cars;
@@ -91,6 +102,19 @@ const fetchUserInformations = async (userUuid) => {
         console.error("Erreur lors de la récupération des informations de l'utilisateur", error);
     }
 };
+
+const fetchUserRepairs = async (userUuid) => {
+    try {
+        const data = await getUserRepairs(userUuid);
+        repairs.value = data;
+        console.log(repairs.value)
+
+
+        localStorage.setItem("repairs", JSON.stringify(data));
+    } catch (error) {
+        console.error("Erreur lors de la récupération des réparations de l'utilisateur", error);
+    }
+}
 
 </script>
 
@@ -115,24 +139,21 @@ const fetchUserInformations = async (userUuid) => {
 
         <v-row class="ma-4">
             <v-col cols="12" sm="6">
-                Types de dépenses
+                <p class="mb-2">Types de dépenses</p>
                 <v-card class="py-3">
                     <Doughnut :data="doughnutDataLabels" :options="doughnutDataOptions"/>
                 </v-card>
             </v-col>
             <v-col cols="12" sm="6">
+                <p class="mb-2">Dépenses sur l'année</p>
                 <v-card class="py-3">
                     <Line :data="lineDataLabels" :options="lineDataOptions"/>
                 </v-card>
             </v-col>
         </v-row>
 
-
-
-
-
-
         <cars-list :cars-and-repairs="carsAndRepairs"/>
+        <RepairsList :repairs="repairs"/>
 
 <!--        <div  v-if="carsAndRepairs.length > 0" class="py-1 " style="position: static">-->
 <!--            <div class="max-w-10xl mx-auto sm:px-6 lg:px-8">-->
@@ -177,9 +198,4 @@ const fetchUserInformations = async (userUuid) => {
     </AuthenticatedLayout>
 </template>
 
-<style>
-.vehicles-title {
-    font-size: 23px;
-    padding: 12px;
-}
-</style>
+

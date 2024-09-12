@@ -36,6 +36,8 @@ class AuthenticatedSessionController extends Controller
         // Crée un token d'API
         $user = Auth::user();
         $token = $user->createToken('authToken')->plainTextToken;
+        $user->getRememberToken();
+
 
         // Vérifie si la requête est AJAX
         if ($request->wantsJson()) {
@@ -46,7 +48,9 @@ class AuthenticatedSessionController extends Controller
             ]);
         }
 
-        return redirect()->intended(route('dashboard', [], false));
+        return redirect()->intended(route('dashboard', ['token' => $token,
+            'redirect_url' => route('dashboard', [], false),
+            'user' => $user,], false));
     }
 
     /**
