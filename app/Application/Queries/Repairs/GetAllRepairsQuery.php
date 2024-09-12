@@ -4,10 +4,10 @@ namespace App\Application\Queries\Repairs;
 
 class GetAllRepairsQuery
 {
-    public int $userId;
+    public string $uuid;
 
-    public function __construct(int $userId)
+    public function __construct(string $uuid)
     {
-        $this->userId = $userId;
+        $this->uuid = $uuid;
     }
 }

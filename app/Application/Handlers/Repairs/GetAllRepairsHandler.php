@@ -27,7 +27,7 @@ class GetAllRepairsHandler
 
     public function handle(GetAllRepairsQuery $query): ?Collection
     {
-        $user = $this->userRepository->getUserById($query->userId);
+        $user = $this->userRepository->getUserByUuid($query->uuid);
 
         if (!$user) {
             return null;

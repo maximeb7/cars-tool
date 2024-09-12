@@ -38,11 +38,15 @@ const submit = async () => {
         const response = await axios.post(route('login'), form.data());
 
         const token = response.data.token;
+        const uuid = response.data.uuid;
         const redirectUrl = response.data.redirect_url;
         const userId = response.data.user?.id
+        const userName = response.data.user?.name
 
         localStorage.setItem('authToken', token);
         localStorage.setItem('userId', userId);
+        localStorage.setItem('userUuid', uuid);
+        localStorage.setItem('userName', userName);
 
         router.visit(redirectUrl);
     } catch (error) {

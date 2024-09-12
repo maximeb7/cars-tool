@@ -15,9 +15,9 @@ Route::middleware('auth:sanctum')->group(function () {
     } );
 
     // USER ENDPOINTS
-    Route::get('/user-informations/{id}', GetUserWithCarsAndRepairs::class);
+    Route::get('/user-informations/{uuid}', GetUserWithCarsAndRepairs::class);
 
     //REPAIRS ENDPOINT
 
-    Route::get('/user-repairs/{id}', GetAllRepairs::class);
+    Route::get('/user-repairs/{uuid}', GetAllRepairs::class);
 });

@@ -25,7 +25,7 @@ class GetUserWithCarsAndRepairsHandler
 
     public function handle(GetUserWithCarsAndRepairsQuery $query)
     {
-        $user = $this->userRepository->getUserById($query->userId);
+        $user = $this->userRepository->getUserByUuid($query->userUuid);
 
         if (!$user) {
             return null;

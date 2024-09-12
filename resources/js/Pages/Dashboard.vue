@@ -1,4 +1,7 @@
 <script setup>
+const props = defineProps({
+    auth: Object
+});
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { onMounted, ref } from 'vue';
@@ -56,17 +59,26 @@ const lineDataOptions = ref({
     }
 )
 
+
 onMounted(async () => {
     const userId = localStorage.getItem('userId');
 
+    if (!userId) {
+        localStorage.setItem('userId', props.auth.user.id);
+        localStorage.setItem('userUuid', props.auth.user.uuid);
+        localStorage.setItem('userName', props.auth.user.name);
+    }
+
+    const userUuid = localStorage.getItem('userUuid');
+
     if (userId) {
-        await fetchUserInformations(userId);
+        await fetchUserInformations(userUuid);
     }
 });
 
-const fetchUserInformations = async (userId) => {
+const fetchUserInformations = async (userUuid) => {
     try {
-        const data = await getUserInformations(userId);
+        const data = await getUserInformations(userUuid);
         userInformations.value = data;
         console.log(userInformations.value)
 

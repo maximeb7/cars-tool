@@ -1,11 +1,10 @@
 import ApiService from '../ApiService';
 
-const getUserInformations = async (userId) => {
+const getUserInformations = async (userUuid) => {
     console.log('en entree')
     try {
-        const response = await ApiService.get(`/user-informations/${userId}`);
+        const response = await ApiService.get(`/user-informations/${userUuid}`);
 
-        const responseData = response.data;
 
         localStorage.setItem("userInfos", JSON.stringify(responseData));
         return responseData

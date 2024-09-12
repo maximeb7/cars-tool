@@ -21,9 +21,9 @@ class GetUserWithCarsAndRepairs extends Controller
 
     }
 
-    public function __invoke(int $id): JsonResponse | Response
+    public function __invoke(string $uuid): JsonResponse | Response
     {
-        $query = new GetUserWithCarsAndRepairsQuery($id);
+        $query = new GetUserWithCarsAndRepairsQuery($uuid);
         $user = $this->handler->handle($query);
 
 

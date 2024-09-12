@@ -18,6 +18,19 @@ class EloquentUserRepository implements UserRepositoryInterface
 
         return new User(
             $eloquentUser->id,
+            $eloquentUser->uuid,
+            $eloquentUser->name,
+            $eloquentUser->email
+        );
+    }
+
+    public function getUserByUuid(string $uuid): ?User
+    {
+        $eloquentUser= EloquentUser::where('uuid', $uuid)->first();
+
+        return new User(
+            $eloquentUser->id,
+            $eloquentUser->uuid,
             $eloquentUser->name,
             $eloquentUser->email
         );

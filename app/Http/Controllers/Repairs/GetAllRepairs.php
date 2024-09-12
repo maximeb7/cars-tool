@@ -19,9 +19,9 @@ class GetAllRepairs extends Controller
     {
     }
 
-    public function __invoke(Request $request, int $id): JsonResponse|Response
+    public function __invoke(Request $request, string $uuid): JsonResponse|Response
     {
-        $query = new GetAllRepairsQuery($id);
+        $query = new GetAllRepairsQuery($uuid);
         $repairs = $this->handler->handle($query);
 
         if (!$repairs) {

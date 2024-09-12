@@ -4,10 +4,10 @@ namespace App\Application\Queries;
 
 class GetUserWithCarsAndRepairsQuery
 {
-    public int $userId;
+    public string $userUuid;
 
-    public function __construct(int $userId)
+    public function __construct(string $userUuid)
     {
-        $this->userId = $userId;
+        $this->userUuid = $userUuid;
     }
 }
