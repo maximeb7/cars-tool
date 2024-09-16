@@ -14,13 +14,13 @@ const onRailToggled = (isRail) => {
 </script>
 
 <template>
-    <div style="display: flex; min-height: 100vh;">
+    <div style="display: flex; min-height: 40vh;">
         <navigation-drawer
             style="flex-shrink: 0"
             @rail-toggled="onRailToggled"
         ></navigation-drawer>
         <div
-            :style="`flex-grow: 1; padding: 16px; margin-left: ${drawerWidth};`"
+            :style="`flex-grow: 1; padding-left: 16px; margin-left: ${drawerWidth};`"
         >
             <div class="min-h-screen bg-gray-100">
                 <main>
@@ -28,7 +28,9 @@ const onRailToggled = (isRail) => {
                 </main>
             </div>
         </div>
-    </div>
+    </div><v-footer border> CAR TOOLS INC</v-footer>
+
+
 </template>
 
 
