@@ -28,9 +28,7 @@ const onRailToggled = (isRail) => {
                 </main>
             </div>
         </div>
-    </div><v-footer border> CAR TOOLS INC</v-footer>
-
-
+    </div><v-footer border> <p class="text-right">CAR TOOLS INC</p></v-footer>
 </template>
 
 
