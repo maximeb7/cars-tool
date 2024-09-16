@@ -89,8 +89,13 @@ class RepairDto
 
     public static function formatAllMonthsForStats(array $repairsDto): array
     {
+        $currentYear = date('Y');
 
-        $groupedData = collect($repairsDto)
+        $filteredRepairs = collect($repairsDto)->filter(function ($repair) use ($currentYear) {
+            return date('Y', strtotime($repair->date)) == $currentYear;
+        });
+
+        $groupedData = $filteredRepairs
             ->groupBy(function ($repair) {
                 return date('Y-m', strtotime($repair->date));
             })
@@ -121,4 +126,5 @@ class RepairDto
             ]
         ];
     }
+
 }

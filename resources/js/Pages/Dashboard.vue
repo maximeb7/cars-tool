@@ -117,8 +117,6 @@ const fetchUserRepairs = async (userUuid) => {
     try {
         const data = await getUserRepairs(userUuid);
         repairs.value = data;
-
-        localStorage.setItem("repairs", JSON.stringify(data));
     } catch (error) {
         console.error("Erreur lors de la récupération des réparations de l'utilisateur", error);
     }
@@ -152,7 +150,7 @@ const fetchUserGlobalsStats = async (userUuid) => {
         <v-card class="py-3">
             <div class="max-w-10xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-62text-gray-900">
+                    <div class="p-62 ">
                         Bienvenue
                     </div>
                 </div>
@@ -167,11 +165,27 @@ const fetchUserGlobalsStats = async (userUuid) => {
                     <Doughnut :data="allTypesForStats" :options="doughnutDataOptions"/>
                 </v-card>
             </v-col>
+            <v-col v-else cols="12" sm="6">
+                <v-progress-circular
+                    :size="70"
+                    :width="7"
+                    color="green"
+                    indeterminate
+                ></v-progress-circular>
+            </v-col>
             <v-col v-if="allByMonthForStats" cols="12" sm="6">
                 <p class="mb-2">Dépenses sur l'année</p>
                 <v-card class="py-3">
                     <Line :data="allByMonthForStats" :options="lineDataOptions"/>
                 </v-card>
+            </v-col>
+            <v-col v-else cols="12" sm="6">
+                <v-progress-circular
+                    :size="70"
+                    :width="7"
+                    color="purple"
+                    indeterminate
+                ></v-progress-circular>
             </v-col>
         </v-row>
 
