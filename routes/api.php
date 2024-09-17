@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Repairs\GetAllRepairs;
+use App\Http\Controllers\Cars\GetUserCars;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\GetUserWithCarsAndRepairs;
@@ -17,7 +18,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // USER ENDPOINTS
     Route::get('/user-informations/{uuid}', GetUserWithCarsAndRepairs::class);
 
-    //REPAIRS ENDPOINT
+    //REPAIRS ENDPOINTS
 
     Route::get('/user-repairs/{uuid}', GetAllRepairs::class);
+
+    //VEHICLES ENDPOINTS
+
+    Route::get('/user/{uuid}/vehicles', GetUserCars::class);
 });

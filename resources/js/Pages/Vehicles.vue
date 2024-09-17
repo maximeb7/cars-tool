@@ -1,22 +1,54 @@
 <script setup>
+
+const props = defineProps({
+    auth: Object
+});
+
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {Head} from "@inertiajs/vue3";
 import {onMounted, ref} from "vue";
+import getUserVehicles from "@/Services/Vehicles/GetUserVehicles.js";
+import CarsList from "@/Components/Cars/CarsList.vue";
 
 const noVehiclesMessage = ref("")
 const vehicles = ref([]);
 
-
+const headers = ref([
+    { key: 'brandName', title: "Marque"},
+    { key: 'model', title: "Modèle"},
+    { key: 'year', title: "Année"},
+]);
 onMounted(async() => {
     console.log('Vehicle vue')
+
+    let userUuid = props.auth.user.uuid;
+
+    if (!userUuid) {
+        userUuid = localStorage.getItem('userUuid');
+    }
+    await fetchUserVehicles(userUuid);
+
+    console.log('VEhicles =>', vehicles.value)
+
+
 
 
 
 })
+
+const fetchUserVehicles = async (userUuid) => {
+    try {
+        const data = await getUserVehicles(userUuid)
+        vehicles.value = data;
+
+    }catch (e) {
+        console.log("Erreur de recuperation des vehicules", e);
+    }
+}
 </script>
 
 <template>
-    <Head title="Repairs"></Head>
+    <Head title="Vehicles"></Head>
 
     <AuthenticatedLayout>
         <v-card class="py-3">
@@ -28,6 +60,13 @@ onMounted(async() => {
                     </div>
                 </div>
             </div>
+        </v-card>
+
+        <v-card v-if="vehicles" class="m-5 mt-5" elevation="1" border="rounded">
+            <v-data-table color="green" :items="vehicles" :headers="headers"></v-data-table>
+        </v-card>
+        <v-card v-else>
+            <p class="title">Vous n'avez aucun véhicules enregistré pour le moment</p>
         </v-card>
 
     </AuthenticatedLayout>

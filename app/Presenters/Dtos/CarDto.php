@@ -3,6 +3,8 @@
 namespace App\Presenters\Dtos;
 
 use App\Domain\Entities\Car;
+use App\Domain\Entities\Repair;
+use Illuminate\Database\Eloquent\Collection;
 
 class CarDto
 {
