@@ -45,6 +45,11 @@ const fetchUserVehicles = async (userUuid) => {
         console.log("Erreur de recuperation des vehicules", e);
     }
 }
+
+const getVehicleDetails = (item) => {
+    console.log("CLique sur item =≥", item.id)
+    this.$router.push({ name: 'VehicleDetails', params: { id: item.id } });
+}
 </script>
 
 <template>
@@ -63,7 +68,12 @@ const fetchUserVehicles = async (userUuid) => {
         </v-card>
 
         <v-card v-if="vehicles" class="m-5 mt-5" elevation="1" border="rounded">
-            <v-data-table color="green" :items="vehicles" :headers="headers"></v-data-table>
+            <v-data-table
+                color="green"
+                :items="vehicles"
+                :headers="headers"
+                @click:row="(event, {item}) => getVehicleDetails(item)"
+            ></v-data-table>
         </v-card>
         <v-card v-else>
             <p class="title">Vous n'avez aucun véhicules enregistré pour le moment</p>
