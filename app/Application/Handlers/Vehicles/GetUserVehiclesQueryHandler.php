@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Application\Handlers\Cars;
+namespace App\Application\Handlers\Vehicles;
 
-use App\Application\Queries\Cars\GetUserCarsQuery;
+use App\Application\Queries\Vehicles\GetUserVehiclesQuery;
 use App\Domain\Repositories\CarRepositoryInterface;
 use App\Domain\Repositories\RepairRepositoryInterface;
 use App\Domain\Repositories\UserRepositoryInterface;
 
-class GetUserCarsQueryHandler
+class GetUserVehiclesQueryHandler
 {
     private UserRepositoryInterface $userRepository;
     private CarRepositoryInterface $carRepository;
@@ -21,7 +21,7 @@ class GetUserCarsQueryHandler
         $this->carRepository = $carRepository;
     }
 
-    public function handle(GetUserCarsQuery $query): array
+    public function handle(GetUserVehiclesQuery $query): array
     {
         $user = $this->userRepository->getUserByUuid($query->userUuid);
 

@@ -34,4 +34,21 @@ public function getCarsIdByUserId(int $userId): array
 
     return $eloquentCarsIds;
 }
+
+    public function getCarById(int $carId): ?Car
+    {
+        $eloquentCar = EloquentCar::find($carId);
+        if (!$eloquentCar) {
+            return null;
+        }
+
+        return new Car(
+            $eloquentCar->id,
+            $eloquentCar->user_id,
+            $eloquentCar->brand_id,
+            $eloquentCar->getBrandName(),
+            $eloquentCar->model,
+            $eloquentCar->year
+        );
+    }
 }

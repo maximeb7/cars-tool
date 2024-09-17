@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Application\Queries\Cars;
+namespace App\Application\Queries\Vehicles;
 
-class GetUserCarsQuery
+class GetUserVehiclesQuery
 {
     public string $userUuid;
 

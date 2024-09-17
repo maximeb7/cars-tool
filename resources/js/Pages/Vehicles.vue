@@ -8,7 +8,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {Head} from "@inertiajs/vue3";
 import {onMounted, ref} from "vue";
 import getUserVehicles from "@/Services/Vehicles/GetUserVehicles.js";
-import CarsList from "@/Components/Cars/CarsList.vue";
+import { router } from '@inertiajs/vue3';
 
 const noVehiclesMessage = ref("")
 const vehicles = ref([]);
@@ -48,7 +48,7 @@ const fetchUserVehicles = async (userUuid) => {
 
 const getVehicleDetails = (item) => {
     console.log("CLique sur item =≥", item.id)
-    this.$router.push({ name: 'VehicleDetails', params: { id: item.id } });
+    router.visit(route('vehicle-details', item.id))
 }
 </script>
 

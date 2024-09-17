@@ -9,4 +9,6 @@ interface CarRepositoryInterface
     public function getCarsByUserId(int $userId): array;
 
     public function getCarsIdByUserId(int $userId): array;
+
+    public function getCarById(int $carId): ?Car;
 }
