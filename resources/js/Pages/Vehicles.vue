@@ -8,11 +8,14 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {Head} from "@inertiajs/vue3";
 import {onMounted, ref} from "vue";
 import getUserVehicles from "@/Services/Vehicles/GetUserVehicles.js";
+import getVehiclesBrands from "@/Services/Brands/getVehiclesBrands.js";
 import {router} from '@inertiajs/vue3';
 
 const noVehiclesMessage = ref("")
 const vehicles = ref([]);
+const brands = ref([]);
 const addVehicleModal = ref(false);
+const newVehicle =  ref(new Object());
 
 const headers = ref([
     {key: 'brandName', title: "Marque"},
@@ -29,6 +32,7 @@ onMounted(async () => {
         userUuid = localStorage.getItem('userUuid');
     }
     await fetchUserVehicles(userUuid);
+    await fetchVehiclesBrands();
 
     console.log('VEhicles =>', vehicles.value)
 
@@ -45,10 +49,51 @@ const fetchUserVehicles = async (userUuid) => {
     }
 }
 
+const fetchVehiclesBrands = async () => {
+    try {
+        const data = await getVehiclesBrands()
+        brands.value = data
+    } catch (e) {
+        console.log("Erreur des marques", e);
+    }
+
+}
+
 const getVehicleDetails = (item) => {
     console.log("CLique sur item =≥", item)
     router.visit(route('vehicle-details', item.id))
 }
+
+const onBrandSelected = (value) => {
+    newVehicle.value.brand_id = value;
+    console.log(newVehicle);
+}
+const onModelInput = (value) => {
+    newVehicle.value.model = value
+    console.log(newVehicle);
+}
+
+const onYearInput = (value) => {
+    newVehicle.value.year = value
+    console.log(newVehicle);
+}
+
+const onPlateInput = (value) => {
+    newVehicle.value.plate = value
+    console.log(newVehicle);
+}
+
+const onImageInput = (value) => {
+    newVehicle.value.image_path = value
+    console.log(newVehicle);
+}
+
+const resetNewVehicle = () => {
+    newVehicle.value = new Object()
+    addVehicleModal.value = false
+}
+
+
 </script>
 
 <template>
@@ -68,7 +113,7 @@ const getVehicleDetails = (item) => {
 
         <v-row class="ma-2">
             <v-col>
-                <v-btn prepend-icon="mdi-plus-circle" color="#47f5b3" @click="addVehicleModal = true">
+                <v-btn prepend-icon="mdi-plus-circle" color="#16de92" @click="addVehicleModal = true" size="large" variant="tonal">
                     Ajouter un véhicule
                 </v-btn>
             </v-col>
@@ -78,28 +123,76 @@ const getVehicleDetails = (item) => {
         <v-dialog
             v-model="addVehicleModal"
             transition="dialog-top-transition"
-            width="auto"
+            width="900"
+            height="700"
+            style=""
         >
             <v-card
-                max-width="400"
-                prepend-icon="mdi-update"
+                max-width="1000"
+                style="overflow: hidden"
+                prepend-icon="mdi-car-convertible"
                 text="Veuillez renseigner les information ci-dessous pour ajouter un véhicule: "
                 title="Ajouter un véhicule"
             >
                 <v-container>
-                    TESTEST
+                    <v-row class="ma-2">
+                        <v-col>
+                            <v-autocomplete
+                                :items="brands"
+                                item-title="name"
+                                item-value="id"
+                                label="Marque"
+                                clearable
+                                variant="outlined"
+                                @update:model-value="onBrandSelected"
+                            ></v-autocomplete>
+                        </v-col>
+                        <v-col>
+                            <v-text-field @update:model-value="onModelInput" label="Modèle" variant="outlined"></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row class="ma-2">
+                        <v-col>
+                            <v-text-field @update:model-value="onYearInput" label="Année" variant="outlined"></v-text-field>
+                        </v-col>
+                        <v-col>
+                            <v-text-field @update:model-value="onPlateInput" label="Immatriculation" variant="outlined"></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row class="ma-2 pr-3">
+                        <v-file-input clearable label="Photo de votre voiture" @update:model-value="onImageInput" prepend-icon="mdi-camera" variant="outlined"></v-file-input>
+                    </v-row>
+
                 </v-container>
                 <template v-slot:actions>
-                    <v-btn
-                        class="ms-auto"
-                        text="Annuler"
-                        @click="addVehicleModal = false"
-                    ></v-btn>
-                    <v-btn
-                        class="ms-auto"
-                        text="Ok"
-                        @click="addVehicleModal = false"
-                    ></v-btn>
+                    <v-row>
+                        <v-spacer></v-spacer>
+                        <v-spacer></v-spacer>
+                        <v-spacer></v-spacer>
+                        <v-spacer></v-spacer>
+                        <v-col class="text-right">
+                            <v-btn
+                                class="ms-auto"
+                                text="Annuler"
+                                variant="tonal"
+                                color="grey"
+                                size="large"
+                                @click="resetNewVehicle"
+                            ></v-btn>
+                        </v-col>
+                        <v-col class="text-left">
+                            <v-btn
+                                class="ms-auto pr-3 pl-3"
+                                size="large"
+                                text="Ajouter"
+                                color="#16de92"
+                                variant="tonal"
+                                @click="addVehicleModal = false"
+                            ></v-btn>
+                        </v-col>
+                    </v-row>
+
+
                 </template>
             </v-card>
         </v-dialog>
