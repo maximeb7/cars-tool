@@ -7,6 +7,7 @@ const props = defineProps({
 const headers = ref([
     { key: 'brandName', title: "Marque"},
     { key: 'model', title: "Modèle"},
+    { key: 'plate', title: "Immatriculation"},
     { key: 'year', title: "Année"},
 ]);
 
