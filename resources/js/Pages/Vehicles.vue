@@ -8,17 +8,18 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {Head} from "@inertiajs/vue3";
 import {onMounted, ref} from "vue";
 import getUserVehicles from "@/Services/Vehicles/GetUserVehicles.js";
-import { router } from '@inertiajs/vue3';
+import {router} from '@inertiajs/vue3';
 
 const noVehiclesMessage = ref("")
 const vehicles = ref([]);
+const addVehicleModal = ref(false);
 
 const headers = ref([
-    { key: 'brandName', title: "Marque"},
-    { key: 'model', title: "Modèle"},
-    { key: 'year', title: "Année"},
+    {key: 'brandName', title: "Marque"},
+    {key: 'model', title: "Modèle"},
+    {key: 'year', title: "Année"},
 ]);
-onMounted(async() => {
+onMounted(async () => {
     console.log('Vehicle vue')
 
     let userUuid = props.auth.user.uuid;
@@ -31,9 +32,6 @@ onMounted(async() => {
     console.log('VEhicles =>', vehicles.value)
 
 
-
-
-
 })
 
 const fetchUserVehicles = async (userUuid) => {
@@ -41,13 +39,13 @@ const fetchUserVehicles = async (userUuid) => {
         const data = await getUserVehicles(userUuid)
         vehicles.value = data;
 
-    }catch (e) {
+    } catch (e) {
         console.log("Erreur de recuperation des vehicules", e);
     }
 }
 
 const getVehicleDetails = (item) => {
-    console.log("CLique sur item =≥", item.id)
+    console.log("CLique sur item =≥", item)
     router.visit(route('vehicle-details', item.id))
 }
 </script>
@@ -67,6 +65,42 @@ const getVehicleDetails = (item) => {
             </div>
         </v-card>
 
+        <v-row class="ma-2">
+            <v-col>
+                <v-btn prepend-icon="mdi-plus-circle" color="#47f5b3" @click="addVehicleModal = true">
+                    Ajouter un véhicule
+                </v-btn>
+            </v-col>
+        </v-row>
+
+
+        <v-dialog
+            v-model="addVehicleModal"
+            transition="dialog-top-transition"
+            width="auto"
+        >
+            <v-card
+                max-width="400"
+                prepend-icon="mdi-update"
+                text="Veuillez renseigner les information ci-dessous pour ajouter un véhicule"
+                title="Ajouter un véhicule"
+            >
+                <template v-slot:actions>
+                    <v-btn
+                        class="ms-auto"
+                        text="Annuler"
+                        @click="addVehicleModal = false"
+                    ></v-btn>
+                    <v-btn
+                        class="ms-auto"
+                        text="Ok"
+                        @click="addVehicleModal = false"
+                    ></v-btn>
+                </template>
+            </v-card>
+        </v-dialog>
+
+
         <v-card v-if="vehicles" class="m-5 mt-5" elevation="1" border="rounded">
             <v-data-table
                 color="green"
@@ -84,7 +118,7 @@ const getVehicleDetails = (item) => {
 </template>
 
 <style scoped>
-.title{
+.title {
     color: #22da94;
     font-size: 20px;
     margin-left: 10px;
