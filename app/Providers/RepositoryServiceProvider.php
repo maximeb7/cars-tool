@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Domain\Repositories\BrandRepositoryInterface;
+use App\Infrastructure\Repositories\EloquentBrandRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Domain\Repositories\UserRepositoryInterface;
 use App\Infrastructure\Repositories\EloquentUserRepository;
@@ -22,5 +24,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(UserRepositoryInterface::class, EloquentUserRepository::class);
         $this->app->bind(CarRepositoryInterface::class, EloquentCarRepository::class);
         $this->app->bind(RepairRepositoryInterface::class, EloquentRepairRepository::class);
+        $this->app->bind(BrandRepositoryInterface::class, EloquentBrandRepository::class);
     }
 }

@@ -83,9 +83,12 @@ const getVehicleDetails = (item) => {
             <v-card
                 max-width="400"
                 prepend-icon="mdi-update"
-                text="Veuillez renseigner les information ci-dessous pour ajouter un véhicule"
+                text="Veuillez renseigner les information ci-dessous pour ajouter un véhicule: "
                 title="Ajouter un véhicule"
             >
+                <v-container>
+                    TESTEST
+                </v-container>
                 <template v-slot:actions>
                     <v-btn
                         class="ms-auto"

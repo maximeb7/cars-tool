@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Brands\GetAllBrands;
 use App\Http\Controllers\Repairs\GetAllRepairs;
 use App\Http\Controllers\Vehicles\GetUserVehicles;
 use App\Http\Controllers\Vehicles\GetVehicleRepairDetails;
@@ -27,4 +28,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/user/{uuid}/vehicles', GetUserVehicles::class);
     Route::get('/vehicle-details/{id}', GetVehicleRepairDetails::class);
+
+
+    //BRANDS
+    Route::get('/brands', GetAllBrands::class);
 });
