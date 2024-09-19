@@ -21,7 +21,9 @@ class EloquentCarRepository implements CarRepositoryInterface
                 $eloquentCar->brand_id,
                 $eloquentCar->getBrandName(),
                 $eloquentCar->model,
-                $eloquentCar->year
+                $eloquentCar->year,
+                $eloquentCar->plate,
+                $eloquentCar->imagePath
             );
         }
 
@@ -48,7 +50,9 @@ public function getCarsIdByUserId(int $userId): array
             $eloquentCar->brand_id,
             $eloquentCar->getBrandName(),
             $eloquentCar->model,
-            $eloquentCar->year
+            $eloquentCar->year,
+            $eloquentCar->plate,
+            $eloquentCar->imagePath
         );
     }
 }

@@ -14,8 +14,10 @@ class CarDto
     public string $model;
     public int $year;
     public array $repairs;
+    public string $plate;
+    public string $imagePath;
 
-    public function __construct(int $id, int $brandId, string $brandName, string $model, int $year, array $repairs)
+    public function __construct(int $id, int $brandId, string $brandName, string $model, int $year, array $repairs, string $plate, string $imagePath)
     {
         $this->id = $id;
         $this->brandId = $brandId;
@@ -23,6 +25,8 @@ class CarDto
         $this->model = $model;
         $this->year = $year;
         $this->repairs = $repairs;
+        $this->plate = $plate;
+        $this->imagePath = $imagePath;
     }
 
     public static function fromEntity(Car $car): self
@@ -35,6 +39,8 @@ class CarDto
             $car->brandName,
             $car->model,
             $car->year,
+            $car->plate,
+            $car->imagePath,
             $repairs
         );
     }

@@ -20,6 +20,8 @@ class Car extends Model
         'brand_id',
         'model',
         'year',
+        'plate',
+        'image_path'
     ];
 
     protected function casts(): array
@@ -52,5 +54,20 @@ class Car extends Model
     public function getRepairs(): Collection
     {
         return $this->repairs;
+    }
+
+    public function setImageAttribute($value)
+    {
+        if ($value) {
+            $path = $value->store('cars', 'public');
+            $this->attributes['image_path'] = $path;
+        }
+    }
+
+    public function getImageUrlAttribute()
+    {
+        return $this->image_path
+            ? Storage::disk('public')->url($this->image_path)
+            : null;
     }
 }
