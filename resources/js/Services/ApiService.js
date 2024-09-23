@@ -24,8 +24,11 @@ class ApiService {
         return this.apiClient.get(url, { params });
     }
 
-    post(url, data) {
-        return this.apiClient.post(url, data);
+    post(url, data, headers = null) {
+        if (null === headers) {
+            return this.apiClient.post(url, data);
+        }
+        return this.apiClient.post(url, data, headers);
     }
 
 }

@@ -4,7 +4,7 @@ namespace App\Domain\Entities;
 
 class Car
 {
-    public int $id;
+    public ?int $id;
     public int $userId;
     public int $brandId;
     public ?string $brandName;
@@ -14,7 +14,7 @@ class Car
     public ?string $imagePath;
     public array $repairs = [];
 
-    public function __construct(int $id, int $userId, int $brandId, ?string $brandName, string $model, int $year, ?string $plate, ?string $imagePath)
+    public function __construct(?int $id, int $userId, int $brandId, ?string $brandName, string $model, int $year, ?string $plate, ?string $imagePath)
     {
         $this->id = $id;
         $this->userId = $userId;

@@ -9,13 +9,15 @@ import {Head} from "@inertiajs/vue3";
 import {onMounted, ref} from "vue";
 import getUserVehicles from "@/Services/Vehicles/GetUserVehicles.js";
 import getVehiclesBrands from "@/Services/Brands/getVehiclesBrands.js";
+import addVehicle from "@/Services/Vehicles/AddVehicle.js";
 import {router} from '@inertiajs/vue3';
 
 const noVehiclesMessage = ref("")
 const vehicles = ref([]);
 const brands = ref([]);
 const addVehicleModal = ref(false);
-const newVehicle =  ref(new Object());
+const newVehicle = ref(new Object());
+const isLoading = ref(false)
 
 const headers = ref([
     {key: 'brandName', title: "Marque"},
@@ -24,7 +26,6 @@ const headers = ref([
     {key: 'year', title: "Année"},
 ]);
 onMounted(async () => {
-    console.log('Vehicle vue')
 
     let userUuid = props.auth.user.uuid;
 
@@ -33,10 +34,6 @@ onMounted(async () => {
     }
     await fetchUserVehicles(userUuid);
     await fetchVehiclesBrands();
-
-    console.log('VEhicles =>', vehicles.value)
-
-
 })
 
 const fetchUserVehicles = async (userUuid) => {
@@ -60,37 +57,61 @@ const fetchVehiclesBrands = async () => {
 }
 
 const getVehicleDetails = (item) => {
-    console.log("CLique sur item =≥", item)
     router.visit(route('vehicle-details', item.id))
 }
 
 const onBrandSelected = (value) => {
     newVehicle.value.brand_id = value;
-    console.log(newVehicle);
 }
 const onModelInput = (value) => {
     newVehicle.value.model = value
-    console.log(newVehicle);
 }
 
 const onYearInput = (value) => {
     newVehicle.value.year = value
-    console.log(newVehicle);
 }
 
 const onPlateInput = (value) => {
     newVehicle.value.plate = value
-    console.log(newVehicle);
 }
 
 const onImageInput = (value) => {
     newVehicle.value.image_path = value
-    console.log(newVehicle);
 }
 
 const resetNewVehicle = () => {
     newVehicle.value = new Object()
     addVehicleModal.value = false
+}
+
+const userAddVehicle = async () => {
+    isLoading.value = true;
+    let formatedObject = formatVehicleParams()
+    await createVehicle(formatedObject);
+}
+
+const createVehicle = async (params) => {
+    try {
+        const data = await addVehicle(params)
+        isLoading.value = false;
+        addVehicleModal.value = false;
+        await fetchUserVehicles(localStorage.getItem('userUuid'))
+    } catch (e) {
+        console.log("Erreur des marques", e);
+    }
+
+}
+const formatVehicleParams = () => {
+    let formData = new FormData();
+    formData.append('user_id', parseInt(localStorage.getItem("userId")));
+    formData.append('brand_id', newVehicle.value.brand_id);
+    formData.append('model', newVehicle.value.model);
+    formData.append('plate', newVehicle.value.plate);
+    formData.append('year', newVehicle.value.year);
+    formData.append('image_path', newVehicle.value.image_path)
+
+    return formData;
+
 }
 
 
@@ -113,7 +134,8 @@ const resetNewVehicle = () => {
 
         <v-row class="ma-2">
             <v-col>
-                <v-btn prepend-icon="mdi-plus-circle" color="#16de92" @click="addVehicleModal = true" size="large" variant="tonal">
+                <v-btn prepend-icon="mdi-plus-circle" color="#16de92" @click="addVehicleModal = true" size="large"
+                       variant="tonal">
                     Ajouter un véhicule
                 </v-btn>
             </v-col>
@@ -148,24 +170,28 @@ const resetNewVehicle = () => {
                             ></v-autocomplete>
                         </v-col>
                         <v-col>
-                            <v-text-field @update:model-value="onModelInput" label="Modèle" variant="outlined"></v-text-field>
+                            <v-text-field @update:model-value="onModelInput" label="Modèle"
+                                          variant="outlined"></v-text-field>
                         </v-col>
                     </v-row>
                     <v-row class="ma-2">
                         <v-col>
-                            <v-text-field @update:model-value="onYearInput" label="Année" variant="outlined"></v-text-field>
+                            <v-text-field @update:model-value="onYearInput" label="Année"
+                                          variant="outlined"></v-text-field>
                         </v-col>
                         <v-col>
-                            <v-text-field @update:model-value="onPlateInput" label="Immatriculation" variant="outlined"></v-text-field>
+                            <v-text-field @update:model-value="onPlateInput" label="Immatriculation"
+                                          variant="outlined"></v-text-field>
                         </v-col>
                     </v-row>
                     <v-row class="ma-2 pr-3">
-                        <v-file-input clearable label="Photo de votre voiture" @update:model-value="onImageInput" prepend-icon="mdi-camera" variant="outlined"></v-file-input>
+                        <v-file-input label="Photo de votre voiture" @update:model-value="onImageInput"
+                                      prepend-icon="mdi-camera" variant="outlined"></v-file-input>
                     </v-row>
 
                 </v-container>
                 <template v-slot:actions>
-                    <v-row>
+                    <v-row v-if="!isLoading">
                         <v-spacer></v-spacer>
                         <v-spacer></v-spacer>
                         <v-spacer></v-spacer>
@@ -187,11 +213,16 @@ const resetNewVehicle = () => {
                                 text="Ajouter"
                                 color="#16de92"
                                 variant="tonal"
-                                @click="addVehicleModal = false"
+                                @click="userAddVehicle"
                             ></v-btn>
                         </v-col>
                     </v-row>
-
+                    <v-row v-else>
+                        <v-progress-circular
+                            color="green"
+                            indeterminate
+                        ></v-progress-circular>
+                    </v-row>
 
                 </template>
             </v-card>

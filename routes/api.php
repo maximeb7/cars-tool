@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Brands\GetAllBrands;
 use App\Http\Controllers\Repairs\GetAllRepairs;
+use App\Http\Controllers\Vehicles\CreateUserVehicle;
 use App\Http\Controllers\Vehicles\GetUserVehicles;
 use App\Http\Controllers\Vehicles\GetVehicleRepairDetails;
 use Illuminate\Http\Request;
@@ -26,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //VEHICLES ENDPOINTS
 
+    Route::post('/vehicles', CreateUserVehicle::class);
     Route::get('/user/{uuid}/vehicles', GetUserVehicles::class);
     Route::get('/vehicle-details/{id}', GetVehicleRepairDetails::class);
 
