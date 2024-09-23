@@ -14,4 +14,6 @@ interface CarRepositoryInterface
     public function getCarById(int $carId): ?Car;
 
     public function createCar(Car $car): EloquentCar;
+
+    public function deleteCarById(int $carId): bool;
 }

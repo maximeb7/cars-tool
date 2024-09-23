@@ -33,12 +33,12 @@ class EloquentCarRepository implements CarRepositoryInterface
         return $cars;
     }
 
-public function getCarsIdByUserId(int $userId): array
-{
-    $eloquentCarsIds = EloquentCar::where('user_id', $userId)->select('id')->pluck('id')->toArray();
+    public function getCarsIdByUserId(int $userId): array
+    {
+        $eloquentCarsIds = EloquentCar::where('user_id', $userId)->select('id')->pluck('id')->toArray();
 
-    return $eloquentCarsIds;
-}
+        return $eloquentCarsIds;
+    }
 
     public function getCarById(int $carId): ?Car
     {
@@ -83,6 +83,24 @@ public function getCarsIdByUserId(int $userId): array
             // Log l'erreur
             \Log::error('Erreur lors de la création de la voiture: ' . $e->getMessage());
             throw new \Exception('Impossible de créer la voiture. Veuillez réessayer.');
+        }
+    }
+
+    public function deleteCarById(int $carId): bool
+    {
+        $car = EloquentCar::find($carId);
+        if (!$car) {
+            return false;
+        }
+
+        try {
+            return DB::transaction(function () use ($car) {
+                $car->delete();
+                return true;
+            });
+        } catch (\Exception $e) {
+            \Log::error('Erreur lors de la suppression du véhicule: ' . $e->getMessage());
+            return false;
         }
     }
 

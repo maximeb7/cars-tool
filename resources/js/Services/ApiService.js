@@ -31,6 +31,10 @@ class ApiService {
         return this.apiClient.post(url, data, headers);
     }
 
+    delete(url) {
+        return this.apiClient.delete(url)
+    }
+
 }
 
 export default new ApiService();

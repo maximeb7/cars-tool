@@ -10,6 +10,7 @@ import {onMounted, ref} from "vue";
 import getUserVehicles from "@/Services/Vehicles/GetUserVehicles.js";
 import getVehiclesBrands from "@/Services/Brands/getVehiclesBrands.js";
 import addVehicle from "@/Services/Vehicles/AddVehicle.js";
+import deleteUserVehicle from "@/Services/Vehicles/DeleteVehicle.js";
 import {router} from '@inertiajs/vue3';
 
 const noVehiclesMessage = ref("")
@@ -17,13 +18,17 @@ const vehicles = ref([]);
 const brands = ref([]);
 const addVehicleModal = ref(false);
 const newVehicle = ref(new Object());
-const isLoading = ref(false)
+const isLoading = ref(false);
+const deleteDialog = ref(false);
+const selectedVehicle = ref(null)
 
 const headers = ref([
     {key: 'brandName', title: "Marque"},
     {key: 'model', title: "Modèle"},
     {key: 'plate', title: "Immatriculation"},
     {key: 'year', title: "Année"},
+    {key: 'kilometers', title: "Kilométrage"},
+    { text: 'Actions', value: 'actions', sortable: false }
 ]);
 onMounted(async () => {
 
@@ -111,7 +116,31 @@ const formatVehicleParams = () => {
     formData.append('image_path', newVehicle.value.image_path)
 
     return formData;
+}
 
+
+const openDeleteDialog = (item) => {
+    selectedVehicle.value = item;
+    deleteDialog.value = true;
+}
+
+const closeDeleteDialog = () => {
+    deleteDialog.value = false;
+    selectedVehicle.value = null;
+}
+
+const deleteVehicle = async() => {
+    try {
+        await deleteUserVehicle(selectedVehicle.value.id)
+
+        vehicles.value = vehicles.value.filter(
+            (vehicle) => vehicle.id !== selectedVehicle.value.id
+        );
+
+        closeDeleteDialog();
+    } catch (error) {
+        console.error('Erreur lors de la suppression du véhicule:', error);
+    }
 }
 
 
@@ -235,7 +264,27 @@ const formatVehicleParams = () => {
                 :items="vehicles"
                 :headers="headers"
                 @click:row="(event, {item}) => getVehicleDetails(item)"
-            ></v-data-table>
+            >
+                <template v-slot:item.actions="{ item }">
+                    <v-btn icon @click.stop="openDeleteDialog(item)" variant="text">
+                        <v-icon color="#f2726f" icon="mdi-delete-outline" size="large"></v-icon>
+                    </v-btn>
+                </template>
+            </v-data-table>
+            <!-- Popup de confirmation -->
+            <v-dialog v-model="deleteDialog" max-width="800">
+                <v-card>
+                    <v-card-title>Confirmer la suppression</v-card-title>
+                    <v-card-text>
+                        Es-tu sûr de vouloir supprimer ce véhicule ?
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="green darken-1" text @click="closeDeleteDialog">Annuler</v-btn>
+                        <v-btn color="red darken-1" text @click="deleteVehicle">Confirmer</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </v-card>
         <v-card v-else>
             <p class="title">Vous n'avez aucun véhicules enregistré pour le moment</p>
