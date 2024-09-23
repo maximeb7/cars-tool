@@ -34,7 +34,8 @@ class CreateUserVehicleQueryHandler
             $query->model,
             $query->year,
             $query->plate,
-            $path
+            $path,
+            $query->kilometers
         );
 
         $newVehicle = $this->carRepository->createCar($vehicleEntity);

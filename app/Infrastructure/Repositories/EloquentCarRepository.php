@@ -25,7 +25,8 @@ class EloquentCarRepository implements CarRepositoryInterface
                 $eloquentCar->model,
                 $eloquentCar->year,
                 $eloquentCar->plate,
-                $eloquentCar->imagePath
+                $eloquentCar->imagePath,
+                $eloquentCar->kilometers
             );
         }
 
@@ -54,7 +55,8 @@ public function getCarsIdByUserId(int $userId): array
             $eloquentCar->model,
             $eloquentCar->year,
             $eloquentCar->plate,
-            $eloquentCar->imagePath
+            $eloquentCar->imagePath,
+            $eloquentCar->kilometers
         );
     }
 
@@ -69,7 +71,8 @@ public function getCarsIdByUserId(int $userId): array
                     'model' => $car->model,
                     'year' => $car->year,
                     'plate' => $car->plate,
-                    'image_path' => $car->imagePath // Assure-toi de stocker le chemin dans la base de données
+                    'image_path' => $car->imagePath,
+                    'kilometers' => $car->kilometers,
                 ]);
 
                 return $createCar;

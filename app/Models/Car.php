@@ -21,7 +21,8 @@ class Car extends Model
         'model',
         'year',
         'plate',
-        'image_path'
+        'image_path',
+        'kilometers'
     ];
 
     protected function casts(): array

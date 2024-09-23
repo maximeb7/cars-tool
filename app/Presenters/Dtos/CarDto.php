@@ -17,9 +17,20 @@ class CarDto
 
     public ?string $plate;
     public ?string $imagePath;
+    public ?string $kilometers;
     public array $repairs;
 
-    public function __construct(int $id, int $brandId, int $userId, string $brandName, string $model, int $year, ?string $plate, ?string $imagePath, array $repairs)
+    public function __construct(
+        int $id,
+        int $brandId,
+        int $userId,
+        string $brandName,
+        string $model,
+        int $year,
+        ?string $plate,
+        ?string $imagePath,
+        ?string $kilometers,
+        array $repairs)
     {
         $this->id = $id;
         $this->brandId = $brandId;
@@ -29,6 +40,7 @@ class CarDto
         $this->year = $year;
         $this->plate = $plate;
         $this->imagePath = $imagePath;
+        $this->kilometers = $kilometers;
         $this->repairs = $repairs;
 
     }
@@ -46,6 +58,7 @@ class CarDto
             $car->year,
             $car->plate,
             $car->imagePath,
+            $car->kilometers,
             $repairs
         );
     }
@@ -61,6 +74,7 @@ class CarDto
             (string)$car->year,
             (string)$car->plate,
             (string)$car->image_path,
+            (string)$car->kilometers
         );
     }
 }

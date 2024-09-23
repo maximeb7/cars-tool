@@ -28,7 +28,8 @@ class CreateUserVehicle extends Controller
             $request->model,
             $request->year,
             $request->plate,
-            $file
+            $file,
+            $request->kilometers
         );
 
         $createVehicle = $this->handler->handle($query);
