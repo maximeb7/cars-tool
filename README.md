@@ -8,8 +8,12 @@
 </p>
 
 ## Installation
+```bash
 - composer install
+```
+```bash
 - npm install
+```
 - Run the migrations and seeds
 
 
@@ -19,8 +23,14 @@
 
 
 ## Start Project
-- Run front-end on your local server typing : npm run dev
-- Run back-end using : php artisan serve
+- Run front-end on your local server typing : 
+  ```bash 
+  npm run dev
+  ```
+- Run back-end using : 
+```bash
+- php artisan serve
+```
 
 
 ## Contributing
