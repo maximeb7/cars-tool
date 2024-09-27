@@ -30,9 +30,12 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale,PointEl
 const userInformations = ref(null);
 const carsAndRepairs = ref([])
 const repairs = ref([])
+const repairsTotalAmount = ref(0);
 const stats = ref([])
 const allByMonthForStats = ref(null)
 const allTypesForStats = ref(null)
+const carsTotal = ref(0);
+const repairsTotal = ref(0)
 const doughnutDataLabels = ref({
     labels: ['Pneus', 'Révision', 'Vidange', 'Freinage'],
     datasets: [
@@ -105,6 +108,7 @@ const fetchUserInformations = async (userUuid) => {
 
         if (data.cars.length > 0) {
             carsAndRepairs.value = data.cars;
+            carsTotal.value = data.cars.length;
         }
 
         localStorage.setItem("userInfos", JSON.stringify(data));
@@ -116,7 +120,10 @@ const fetchUserInformations = async (userUuid) => {
 const fetchUserRepairs = async (userUuid) => {
     try {
         const data = await getUserRepairs(userUuid);
+        const price = data.reduce((accumulator, repair) => accumulator + repair.price, 0)
+        repairsTotalAmount.value = price.toFixed(1);
         repairs.value = data;
+        repairsTotal.value = data.length
     } catch (error) {
         console.error("Erreur lors de la récupération des réparations de l'utilisateur", error);
     }
@@ -126,6 +133,7 @@ const fetchUserGlobalsStats = async (userUuid) => {
     try {
         const data = await getUserRepairsGlobalStats(userUuid);
         stats.value = data;
+
         allTypesForStats.value = stats.value.allTypesForStats
         allByMonthForStats.value = stats.value.allByMonthForStats
 
@@ -173,10 +181,10 @@ const fetchUserGlobalsStats = async (userUuid) => {
                     indeterminate
                 ></v-progress-circular>
             </v-col>
-            <v-col v-if="allByMonthForStats" cols="12" sm="6">
+            <v-col v-if="allByMonthForStats" cols="12" sm="6" class="max-h-28">
                 <p class="mb-2">Dépenses sur l'année</p>
                 <v-card class="py-3">
-                    <Line :data="allByMonthForStats" :options="lineDataOptions"/>
+                    <Line :size="70" :data="allByMonthForStats" :options="lineDataOptions"/>
                 </v-card>
             </v-col>
             <v-col v-else cols="12" sm="6">
@@ -186,6 +194,105 @@ const fetchUserGlobalsStats = async (userUuid) => {
                     color="purple"
                     indeterminate
                 ></v-progress-circular>
+            </v-col>
+        </v-row>
+
+        <v-row class="ma-4 mb-13" style="height: 12em" >
+            <v-col cols="12" sm="4">
+                <v-card
+
+                    class="mx-auto h-100"
+                >
+                    <v-card-item title="Total des dépenses">
+
+                    </v-card-item>
+
+                    <v-card-text class="py-0 mt-10">
+                        <v-row align="center" no-gutters>
+                            <v-col
+                                class="text-h3"
+                                cols="6"
+                                style="color:#22da94"
+                            >
+                                {{ repairsTotalAmount }}€
+                            </v-col>
+
+                            <v-col class="text-right" cols="6">
+                                <v-icon
+                                    color="#22da94"
+                                    icon="mdi-cash-register"
+                                    size="77"
+                                ></v-icon>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+
+                    <v-divider></v-divider>
+                </v-card>
+            </v-col>
+            <v-col cols="12" sm="4">
+                <v-card
+
+                    class="mx-auto h-100"
+                >
+                    <v-card-item title="Nombre de véhicules">
+
+                    </v-card-item>
+
+                    <v-card-text class="py-0 mt-10">
+                        <v-row align="center" no-gutters>
+                            <v-col
+                                class="text-h3"
+                                cols="6"
+                                style="color:#22da94"
+                            >
+                                {{ carsTotal }}
+                            </v-col>
+
+                            <v-col class="text-right" cols="6">
+                                <v-icon
+                                    color="#22da94"
+                                    icon="mdi-car-outline"
+                                    size="77"
+                                ></v-icon>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+
+                    <v-divider></v-divider>
+                </v-card>
+            </v-col>
+            <v-col cols="12" sm="4">
+                <v-card
+
+                    class="mx-auto h-100"
+                >
+                    <v-card-item title="Nombre d'entretiens réalisés">
+
+                    </v-card-item>
+
+                    <v-card-text class="py-0 mt-10">
+                        <v-row align="center" no-gutters>
+                            <v-col
+                                class="text-h3"
+                                cols="6"
+                                style="color:#22da94"
+                            >
+                                {{ repairsTotal }}
+                            </v-col>
+
+                            <v-col class="text-right" cols="6">
+                                <v-icon
+                                    color="#22da94"
+                                    icon="mdi-tools"
+                                    size="77"
+                                ></v-icon>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+
+                    <v-divider></v-divider>
+                </v-card>
             </v-col>
         </v-row>
 
