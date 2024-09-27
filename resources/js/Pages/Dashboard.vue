@@ -24,6 +24,7 @@ import {
 } from 'chart.js'
 import { Doughnut } from 'vue-chartjs';
 import { Line } from "vue-chartjs";
+import BasicCard from "@/Components/Cards/BasicCard.vue";
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale,PointElement,LineElement,Title)
 
@@ -197,102 +198,33 @@ const fetchUserGlobalsStats = async (userUuid) => {
             </v-col>
         </v-row>
 
-        <v-row class="ma-4 mb-13" style="height: 12em" >
+        <v-row class="ma-4 mb-13" style="height: 13em" >
             <v-col cols="12" sm="4">
-                <v-card
-
-                    class="mx-auto h-100"
-                >
-                    <v-card-item title="Total des dépenses">
-
-                    </v-card-item>
-
-                    <v-card-text class="py-0 mt-10">
-                        <v-row align="center" no-gutters>
-                            <v-col
-                                class="text-h3"
-                                cols="6"
-                                style="color:#22da94"
-                            >
-                                {{ repairsTotalAmount }}€
-                            </v-col>
-
-                            <v-col class="text-right" cols="6">
-                                <v-icon
-                                    color="#22da94"
-                                    icon="mdi-cash-register"
-                                    size="77"
-                                ></v-icon>
-                            </v-col>
-                        </v-row>
-                    </v-card-text>
-
-                    <v-divider></v-divider>
-                </v-card>
+                <basic-card
+                    color="#22da94"
+                    icon="mdi-cash-register"
+                    title="Total des dépenses"
+                    :value="repairsTotalAmount"
+                    value-type="€"
+                />
             </v-col>
             <v-col cols="12" sm="4">
-                <v-card
-
-                    class="mx-auto h-100"
-                >
-                    <v-card-item title="Nombre de véhicules">
-
-                    </v-card-item>
-
-                    <v-card-text class="py-0 mt-10">
-                        <v-row align="center" no-gutters>
-                            <v-col
-                                class="text-h3"
-                                cols="6"
-                                style="color:#22da94"
-                            >
-                                {{ carsTotal }}
-                            </v-col>
-
-                            <v-col class="text-right" cols="6">
-                                <v-icon
-                                    color="#22da94"
-                                    icon="mdi-car-outline"
-                                    size="77"
-                                ></v-icon>
-                            </v-col>
-                        </v-row>
-                    </v-card-text>
-
-                    <v-divider></v-divider>
-                </v-card>
+                <basic-card
+                    color="#22da94"
+                    icon="mdi-car-outline"
+                    title="Nombre de véhicules"
+                    :value="carsTotal"
+                    value-type=""
+                />
             </v-col>
             <v-col cols="12" sm="4">
-                <v-card
-
-                    class="mx-auto h-100"
-                >
-                    <v-card-item title="Nombre d'entretiens réalisés">
-
-                    </v-card-item>
-
-                    <v-card-text class="py-0 mt-10">
-                        <v-row align="center" no-gutters>
-                            <v-col
-                                class="text-h3"
-                                cols="6"
-                                style="color:#22da94"
-                            >
-                                {{ repairsTotal }}
-                            </v-col>
-
-                            <v-col class="text-right" cols="6">
-                                <v-icon
-                                    color="#22da94"
-                                    icon="mdi-tools"
-                                    size="77"
-                                ></v-icon>
-                            </v-col>
-                        </v-row>
-                    </v-card-text>
-
-                    <v-divider></v-divider>
-                </v-card>
+                <basic-card
+                    color="#22da94"
+                    icon="mdi-tools"
+                    title="Nombre d'entretiens réalisés"
+                    :value="repairsTotal"
+                    value-type=""
+                />
             </v-col>
         </v-row>
 
