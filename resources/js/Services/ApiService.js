@@ -31,6 +31,12 @@ class ApiService {
         return this.apiClient.post(url, data, headers);
     }
 
+    put(url, data, headers = null) {
+        if (null === headers) {
+            return this.apiClient.put(url, data);
+        }
+        return this.apiClient.put(url, data, headers);
+    }
     delete(url) {
         return this.apiClient.delete(url)
     }

@@ -48,11 +48,13 @@ const submit = async () => {
         localStorage.setItem('userUuid', uuid);
         localStorage.setItem('userName', userName);
 
-        router.visit(redirectUrl);
+        router.visit(redirectUrl, {
+            preserveScroll: false,
+            preserveState: false,
+            replace: true
+        });
     } catch (error) {
-        if (error.response && error.response.data) {
-            form.setErrors(error.response.data.errors);
-        }
+
     }
 };
 </script>

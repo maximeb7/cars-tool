@@ -62,7 +62,10 @@ const fetchVehiclesBrands = async () => {
 }
 
 const getVehicleDetails = (item) => {
-    router.visit(route('vehicle-details', item.id))
+    router.visit(route('vehicle-details'), {
+        data: { vehicle: item },
+        method: 'get'
+    });
 }
 
 const onBrandSelected = (value) => {

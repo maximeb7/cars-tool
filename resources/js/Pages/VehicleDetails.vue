@@ -1,13 +1,105 @@
 <script setup>
-
-import {Head} from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import {onMounted, ref} from "vue";
+import getVehiclesBrands from "@/Services/Brands/getVehiclesBrands.js";
+import addVehicle from "@/Services/Vehicles/AddVehicle.js";
+import editVehicle from "@/Services/Vehicles/EditVehicle.js";
+import { router } from "@inertiajs/vue3";
+
+const vehicleDetails = ref(null)
+const brands = ref([]);
+const isLoading = ref(false);
+
+const props = defineProps({
+    vehicle: {
+        type: Object,
+        required: true
+    }
+});
+
+onMounted(async() => {
+    console.log('Vehicle data:', props.vehicle);
+    vehicleDetails.value = props.vehicle;
+    await fetchVehiclesBrands()
+});
+
+const fetchVehiclesBrands = async () => {
+    try {
+        const data = await getVehiclesBrands()
+        brands.value = data
+    } catch (e) {
+        console.log("Erreur des marques", e);
+    }
+
+}
+
+const onBrandSelected = (value) => {
+    vehicleDetails.value.brand_id = value;
+}
+const onModelInput = (value) => {
+    vehicleDetails.value.model = value
+}
+
+const onYearInput = (value) => {
+    vehicleDetails.value.year = value
+}
+
+const onPlateInput = (value) => {
+    vehicleDetails.value.plate = value
+}
+
+const onImageInput = (value) => {
+    vehicleDetails.value.image_path = value
+}
+
+const onKmsInput = (value) => {
+    vehicleDetails.value.kilometers = value
+}
+
+const userEditVehicle = async () => {
+    isLoading.value = true;
+    let formatedObject = formatVehicleParams()
+    await putEditVehicle(formatedObject);
+}
+
+const putEditVehicle = async (params) => {
+    try {
+        const data = await editVehicle(params.id, params)
+        isLoading.value = false;
+    } catch (e) {
+        console.log("Erreure lors de la mise à jour du véhicule", e);
+    }
+
+}
+const formatVehicleParams = () => {
+    let formData = new FormData();
+    formData.append('user_id', parseInt(localStorage.getItem("userId")));
+    formData.append('brand_id', vehicleDetails.value.brand_id);
+    formData.append('model', vehicleDetails.value.model);
+    formData.append('plate', vehicleDetails.value.plate);
+    formData.append('year', vehicleDetails.value.year);
+    formData.append('image_path', vehicleDetails.value.image_path)
+    formData.append('id', vehicleDetails.value.id)
+
+    return formData;
+}
+const goBack = () => {
+    if (window.history.length > 2) {
+        window.history.back();
+    } else {
+        router.visit(route('dashboard'));
+    }
+}
+
+
+
 </script>
 
 <template>
     <Head title="Vehicle Details"></Head>
     <AuthenticatedLayout>
-        <v-card class="py-3">
+        <v-card class="py-5">
             <div class="max-w-10xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-62text-gray-900 d-flex">
@@ -16,6 +108,77 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
                     </div>
                 </div>
             </div>
+        </v-card>
+
+        <v-card class="py-3 mt-8 m-2">
+
+
+            <v-container>
+                <v-row class="ma-2">
+                    <v-col>
+                        <v-autocomplete
+                            :items="brands"
+                            item-title="name"
+                            item-value="id"
+                            label="Marque"
+                            clearable
+                            variant="outlined"
+                            :model-value="props.vehicle.brandName"
+                            @update:model-value="onBrandSelected"
+                        ></v-autocomplete>
+                    </v-col>
+                    <v-col>
+                        <v-text-field @update:model-value="onModelInput" :model-value="props.vehicle.model" label="Modèle"
+                                      variant="outlined"></v-text-field>
+                    </v-col>
+                </v-row>
+                <v-row class="ma-2">
+                    <v-col>
+                        <v-text-field @update:model-value="onYearInput" :model-value="props.vehicle.year" label="Année"
+                                      variant="outlined"></v-text-field>
+                    </v-col>
+                    <v-col>
+                        <v-text-field @update:model-value="onPlateInput" :model-value="props.vehicle.plate" label="Immatriculation"
+                                      variant="outlined"></v-text-field>
+                    </v-col>
+                </v-row>
+                <v-row class="ma-2">
+                    <v-col>
+                        <v-text-field @update:model-value="onKmsInput" :model-value="props.vehicle.kilometers" label="Kilométrage"
+                                      variant="outlined"></v-text-field>
+                    </v-col>
+
+                </v-row>
+                <v-row class="ma-2 pr-3">
+                    <v-file-input label="Photo de votre voiture" @update:model-value="onImageInput" :model-value="props.vehicle.imagePath"
+                                  prepend-icon="mdi-camera" variant="outlined"></v-file-input>
+                </v-row>
+
+                <v-row class="ma-2" justify="end">
+                    <v-spacer></v-spacer>
+                    <v-spacer></v-spacer>
+                    <v-col cols="4" sm="2">
+                        <v-btn prepend-icon="mdi-cancel" color="#de2a16" @click="goBack" size="large"
+                               variant="tonal">
+                            Annuler
+                        </v-btn>
+                    </v-col>
+                    <v-col cols="4" sm="3">
+                        <v-btn prepend-icon="mdi-pencil"
+                               color="#16de92"
+                               :loading="isLoading"
+                               @click="userEditVehicle"
+                               size="large"
+                               variant="tonal">
+                            Enregistrer
+                            <template v-slot:loader>
+                                <v-progress-circular color="#16de92" indeterminate></v-progress-circular>
+                            </template>
+                        </v-btn>
+                    </v-col>
+                </v-row>
+
+            </v-container>
         </v-card>
     </AuthenticatedLayout>
 </template>
