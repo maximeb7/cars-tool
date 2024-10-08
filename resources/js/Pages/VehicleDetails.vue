@@ -19,7 +19,6 @@ const props = defineProps({
 });
 
 onMounted(async() => {
-    console.log('Vehicle data:', props.vehicle);
     vehicleDetails.value = props.vehicle;
     await fetchVehiclesBrands()
 });
@@ -65,7 +64,8 @@ const userEditVehicle = async () => {
 
 const putEditVehicle = async (params) => {
     try {
-        const data = await editVehicle(params.id, params)
+        const vehicleId = vehicleDetails.value.id
+        const data = await editVehicle(vehicleId, params)
         isLoading.value = false;
     } catch (e) {
         console.log("Erreure lors de la mise à jour du véhicule", e);
@@ -74,16 +74,23 @@ const putEditVehicle = async (params) => {
 }
 const formatVehicleParams = () => {
     let formData = new FormData();
+    formData.append('_method', 'PUT');
     formData.append('user_id', parseInt(localStorage.getItem("userId")));
-    formData.append('brand_id', vehicleDetails.value.brand_id);
+    formData.append('brand_id', vehicleDetails.value.brandId);
     formData.append('model', vehicleDetails.value.model);
     formData.append('plate', vehicleDetails.value.plate);
     formData.append('year', vehicleDetails.value.year);
-    formData.append('image_path', vehicleDetails.value.image_path)
-    formData.append('id', vehicleDetails.value.id)
+    formData.append('id', vehicleDetails.value.id);
+    formData.append('kilometers', vehicleDetails.value.kilometers);
+
+    if (vehicleDetails.value.image_path instanceof File) {
+        formData.append('image_path', vehicleDetails.value.image_path);
+    } else if (typeof vehicleDetails.value.imagePath === 'string') {
+        formData.append('image_path', vehicleDetails.value.imagePath);
+    }
 
     return formData;
-}
+};
 const goBack = () => {
     if (window.history.length > 2) {
         window.history.back();
@@ -102,7 +109,7 @@ const goBack = () => {
         <v-card class="py-5">
             <div class="max-w-10xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-62text-gray-900 d-flex">
+                    <div class="p-62text-gray-900 d-flex align-center">
                         <v-icon color="#22da94" icon="mdi-car-search-outline" size="x-large"></v-icon>
                         <p class="title">Détails du véhicule</p>
                     </div>
@@ -154,16 +161,16 @@ const goBack = () => {
                                   prepend-icon="mdi-camera" variant="outlined"></v-file-input>
                 </v-row>
 
-                <v-row class="ma-2" justify="end">
+                <v-row class="ma-2" justify="end" align-content="end">
                     <v-spacer></v-spacer>
                     <v-spacer></v-spacer>
-                    <v-col cols="4" sm="2">
+                    <v-col cols="6" sm="4">
                         <v-btn prepend-icon="mdi-cancel" color="#de2a16" @click="goBack" size="large"
                                variant="tonal">
                             Annuler
                         </v-btn>
                     </v-col>
-                    <v-col cols="4" sm="3">
+                    <v-col cols="6" sm="4">
                         <v-btn prepend-icon="mdi-pencil"
                                color="#16de92"
                                :loading="isLoading"
@@ -183,6 +190,11 @@ const goBack = () => {
     </AuthenticatedLayout>
 </template>
 
-<style scoped>
 
+<style scoped>
+.title {
+    color: #22da94;
+    font-size: 20px;
+    margin-left: 10px;
+}
 </style>

@@ -9,6 +9,7 @@ use App\Http\Controllers\Vehicles\GetVehicleRepairDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\GetUserWithCarsAndRepairs;
+use App\Http\Controllers\Vehicles\EditUserVehicle;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -29,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     //VEHICLES ENDPOINTS
 
     Route::post('/vehicles', CreateUserVehicle::class);
+    Route::put('/vehicles/{id}', EditUserVehicle::class);
     Route::get('/user/{uuid}/vehicles', GetUserVehicles::class);
     Route::get('/vehicle-details/{id}', GetVehicleRepairDetails::class);
     Route::delete('/vehicles/{id}', DeleteUserVehicle::class);

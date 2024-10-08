@@ -2,10 +2,10 @@
 
 namespace App\Infrastructure\Repositories;
 
+use App\Application\Queries\Vehicles\EditUserVehicleQuery;
 use App\Domain\Entities\Car;
 use App\Domain\Repositories\CarRepositoryInterface;
 use App\Models\Car as EloquentCar;
-use App\Presenters\Dtos\CarDto;
 use Illuminate\Support\Facades\DB;
 
 class EloquentCarRepository implements CarRepositoryInterface
@@ -104,4 +104,20 @@ class EloquentCarRepository implements CarRepositoryInterface
         }
     }
 
+    public function updateCarById(EditUserVehicleQuery $query): EloquentCar
+    {
+        $eloquentCar = EloquentCar::findOrFail($query->id);
+
+        $eloquentCar->brand_id = $query->brandId;
+        $eloquentCar->model = $query->model;
+        $eloquentCar->year = $query->year;
+        $eloquentCar->plate = $query->plate;
+        if ($query->imagePath) {
+            $eloquentCar->image_path = $query->imagePath;
+        }
+        $eloquentCar->kilometers = $query->kilometers;
+        $eloquentCar->save();
+
+        return $eloquentCar;
+    }
 }
