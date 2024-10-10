@@ -167,7 +167,7 @@ const fetchUserGlobalsStats = async (userUuid) => {
         </v-card>
 
         <!-- Stats part-->
-        <v-row class="ma-4">
+        <v-row class="ma-4 mb-8">
             <v-col v-if="allTypesForStats" cols="12" sm="6">
                 <p class="mb-2">Types de dépenses</p>
                 <v-card class="py-3">
@@ -182,7 +182,7 @@ const fetchUserGlobalsStats = async (userUuid) => {
                     indeterminate
                 ></v-progress-circular>
             </v-col>
-            <v-col v-if="allByMonthForStats" cols="12" sm="6" class="max-h-28">
+            <v-col v-if="allByMonthForStats" cols="12" sm="6" class="max-h-30">
                 <p class="mb-2">Dépenses sur l'année</p>
                 <v-card class="py-3">
                     <Line :size="70" :data="allByMonthForStats" :options="lineDataOptions"/>
@@ -198,7 +198,7 @@ const fetchUserGlobalsStats = async (userUuid) => {
             </v-col>
         </v-row>
 
-        <v-row class="ma-4 mb-13" style="height: 13em" >
+        <v-row class="ma-4 mt-10 mb-13"  >
             <v-col cols="12" sm="4">
                 <basic-card
                     color="#22da94"

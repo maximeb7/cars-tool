@@ -34,7 +34,7 @@
                 <v-divider></v-divider>
 
                 <v-list density="compact" nav>
-                    <v-list-item color="#08c97f" prepend-icon="mdi-home-city" title="Home" value="home" :href="route('dashboard')"></v-list-item>
+                    <v-list-item color="#08c97f" prepend-icon="mdi-home" title="Home" value="home" :href="route('dashboard')"></v-list-item>
                     <v-list-item color="#08c97f" prepend-icon="mdi-car-multiple" title="Mes véhicules" value="vehicles" :href="route('vehicles')">
                     </v-list-item>
                     <v-list-item color="#08c97f" prepend-icon="mdi-car-wrench" title="Maintenances" value="maintenance" :href="route('repairs')">

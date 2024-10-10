@@ -280,9 +280,13 @@ const deleteVehicle = async() => {
                 color="green"
                 :items="vehicles"
                 :headers="headers"
-                @click:row="(event, {item}) => getVehicleDetails(item)"
             >
+
+
                 <template v-slot:item.actions="{ item }">
+                    <v-btn icon @click.stop="getVehicleDetails(item)" variant="text">
+                        <v-icon color="#22da94" icon="mdi-square-edit-outline" size="large"></v-icon>
+                    </v-btn>
                     <v-btn icon @click.stop="openDeleteDialog(item)" variant="text">
                         <v-icon color="#f2726f" icon="mdi-delete-outline" size="large"></v-icon>
                     </v-btn>

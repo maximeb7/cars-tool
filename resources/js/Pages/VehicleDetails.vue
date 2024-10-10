@@ -128,12 +128,21 @@ const goBack = () => {
             </div>
         </v-card>
 
+        <v-row class="ma-2 justify-end">
+            <v-col cols="12" sm="12">
+                <v-btn prepend-icon="mdi-keyboard-return" color="#757575" @click="goBack" size="large"
+                       variant="tonal">
+                    Retour
+                </v-btn>
+            </v-col>
+        </v-row>
+
         <v-card class="py-3 mt-8 m-10">
 
 
             <v-container>
-                <v-row class="ma-2 justify-center ">
-                    <v-img :src="imageSrc" alt="Car Image" max-width="300" class="rounded-lg" />
+                <v-row class="ma-2 justify-center mb-8 ">
+                    <v-img :src="imageSrc" alt="Car Image" max-width="400" class="rounded-lg" />
                 </v-row>
                 <v-row class="ma-2 pr-3">
                     <v-file-input label="Photo de votre voiture" @update:model-value="onImageInput"
