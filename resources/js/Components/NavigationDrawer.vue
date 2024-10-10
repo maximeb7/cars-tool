@@ -5,6 +5,7 @@
                 v-model="drawer"
                 :rail="rail"
                 permanent
+                class="bg-grey-darken-3"
                 rounded="sm"
                 @click="rail = false"
                 @update:rail="handleRailToggle"
@@ -23,6 +24,7 @@
                     <template v-slot:append>
                         <v-btn
                             icon="mdi-chevron-left"
+                            color="#23e89c"
                             variant="text"
                             @click.stop="toggleRail"
                         ></v-btn>

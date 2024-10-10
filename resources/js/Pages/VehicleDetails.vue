@@ -128,7 +128,7 @@ const goBack = () => {
             </div>
         </v-card>
 
-        <v-card class="py-3 mt-8 m-2">
+        <v-card class="py-3 mt-8 m-10">
 
 
             <v-container>
