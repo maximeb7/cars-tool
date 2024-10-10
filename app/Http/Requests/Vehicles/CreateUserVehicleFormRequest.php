@@ -30,6 +30,7 @@ class CreateUserVehicleFormRequest extends FormRequest
             'model' => ['required', 'string'],
             'year' => ['required', 'string'],
             'plate' => ['required', 'string'],
+            'kilometers' => ['required', 'string'],
             'image_path' => ['nullable','image', 'file', 'mimes:jpeg,png,jpg', 'max:5000'],
         ];
     }

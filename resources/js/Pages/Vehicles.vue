@@ -87,6 +87,10 @@ const onImageInput = (value) => {
     newVehicle.value.image_path = value
 }
 
+const onKmsInput = (value) => {
+    newVehicle.value.kilometers = value
+}
+
 const resetNewVehicle = () => {
     newVehicle.value = new Object()
     addVehicleModal.value = false
@@ -117,6 +121,7 @@ const formatVehicleParams = () => {
     formData.append('plate', newVehicle.value.plate);
     formData.append('year', newVehicle.value.year);
     formData.append('image_path', newVehicle.value.image_path)
+    formData.append('kilometers', newVehicle.value.kilometers)
 
     return formData;
 }
@@ -218,9 +223,17 @@ const deleteVehicle = async() => {
                         </v-col>
                     </v-row>
                     <v-row class="ma-2 pr-3">
+                        <v-col cols="12" sm="12">
+                            <v-text-field @update:model-value="onKmsInput" label="Kilométrage"
+                                          variant="outlined"></v-text-field>
+                        </v-col>
+
+                    </v-row>
+                    <v-row class="ma-2 pr-3">
                         <v-file-input label="Photo de votre voiture" @update:model-value="onImageInput"
                                       prepend-icon="mdi-camera" variant="outlined"></v-file-input>
                     </v-row>
+
 
                 </v-container>
                 <template v-slot:actions>
