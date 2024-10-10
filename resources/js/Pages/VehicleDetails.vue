@@ -1,11 +1,11 @@
 <script setup>
 import { Head } from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import getVehiclesBrands from "@/Services/Brands/getVehiclesBrands.js";
-import addVehicle from "@/Services/Vehicles/AddVehicle.js";
 import editVehicle from "@/Services/Vehicles/EditVehicle.js";
 import { router } from "@inertiajs/vue3";
+
 
 const vehicleDetails = ref(null)
 const brands = ref([]);
@@ -20,8 +20,18 @@ const props = defineProps({
 
 onMounted(async() => {
     vehicleDetails.value = props.vehicle;
+
     await fetchVehiclesBrands()
 });
+
+const imageSrc = computed(() => {
+    return vehicleDetails.value && vehicleDetails.value.imagePath
+        ? `${import.meta.env.VITE_APP_API_URL}/storage/${vehicleDetails.value.imagePath}`
+        : null;
+});
+
+
+
 
 const fetchVehiclesBrands = async () => {
     try {
@@ -88,6 +98,7 @@ const formatVehicleParams = () => {
     } else if (typeof vehicleDetails.value.imagePath === 'string') {
         formData.append('image_path', vehicleDetails.value.imagePath);
     }
+    console.log(formData)
 
     return formData;
 };
@@ -121,8 +132,16 @@ const goBack = () => {
 
 
             <v-container>
+                <v-row class="ma-2 justify-center ">
+                    <v-img :src="imageSrc" alt="Car Image" max-width="300" class="rounded-lg" />
+                </v-row>
+                <v-row class="ma-2 pr-3">
+                    <v-file-input label="Photo de votre voiture" @update:model-value="onImageInput"
+                                  prepend-icon="mdi-camera" variant="outlined"></v-file-input>
+                </v-row>
+
                 <v-row class="ma-2">
-                    <v-col>
+                    <v-col cols="12" sm="12">
                         <v-autocomplete
                             :items="brands"
                             item-title="name"
@@ -134,48 +153,45 @@ const goBack = () => {
                             @update:model-value="onBrandSelected"
                         ></v-autocomplete>
                     </v-col>
-                    <v-col>
+                    <v-col cols="12" sm="12">
                         <v-text-field @update:model-value="onModelInput" :model-value="props.vehicle.model" label="Modèle"
                                       variant="outlined"></v-text-field>
                     </v-col>
                 </v-row>
                 <v-row class="ma-2">
-                    <v-col>
+                    <v-col cols="12" sm="12">
                         <v-text-field @update:model-value="onYearInput" :model-value="props.vehicle.year" label="Année"
                                       variant="outlined"></v-text-field>
                     </v-col>
-                    <v-col>
+                    <v-col cols="12" sm="12">
                         <v-text-field @update:model-value="onPlateInput" :model-value="props.vehicle.plate" label="Immatriculation"
                                       variant="outlined"></v-text-field>
                     </v-col>
                 </v-row>
                 <v-row class="ma-2">
-                    <v-col>
+                    <v-col cols="12" sm="12">
                         <v-text-field @update:model-value="onKmsInput" :model-value="props.vehicle.kilometers" label="Kilométrage"
                                       variant="outlined"></v-text-field>
                     </v-col>
 
                 </v-row>
-                <v-row class="ma-2 pr-3">
-                    <v-file-input label="Photo de votre voiture" @update:model-value="onImageInput" :model-value="props.vehicle.imagePath"
-                                  prepend-icon="mdi-camera" variant="outlined"></v-file-input>
-                </v-row>
+
 
                 <v-row class="ma-2" justify="end" align-content="end">
                     <v-spacer></v-spacer>
                     <v-spacer></v-spacer>
-                    <v-col cols="6" sm="4">
-                        <v-btn prepend-icon="mdi-cancel" color="#de2a16" @click="goBack" size="large"
+                    <v-col cols="7" sm="3">
+                        <v-btn prepend-icon="mdi-cancel" color="#de2a16" @click="goBack"
                                variant="tonal">
                             Annuler
                         </v-btn>
                     </v-col>
-                    <v-col cols="6" sm="4">
+                    <v-col cols="8" sm="3">
                         <v-btn prepend-icon="mdi-pencil"
                                color="#16de92"
                                :loading="isLoading"
                                @click="userEditVehicle"
-                               size="large"
+
                                variant="tonal">
                             Enregistrer
                             <template v-slot:loader>

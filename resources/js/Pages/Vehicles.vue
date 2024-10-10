@@ -178,19 +178,20 @@ const deleteVehicle = async() => {
             v-model="addVehicleModal"
             transition="dialog-top-transition"
             width="900"
-            height="700"
+            height="1000"
+            class="mb-10"
             style=""
         >
             <v-card
                 max-width="1000"
-                style="overflow: hidden"
+                style="overflow: hidden ;"
                 prepend-icon="mdi-car-convertible"
                 text="Veuillez renseigner les information ci-dessous pour ajouter un véhicule: "
                 title="Ajouter un véhicule"
             >
                 <v-container>
                     <v-row class="ma-2">
-                        <v-col>
+                        <v-col cols="12" sm="12">
                             <v-autocomplete
                                 :items="brands"
                                 item-title="name"
@@ -201,17 +202,17 @@ const deleteVehicle = async() => {
                                 @update:model-value="onBrandSelected"
                             ></v-autocomplete>
                         </v-col>
-                        <v-col>
+                        <v-col cols="12" sm="12">
                             <v-text-field @update:model-value="onModelInput" label="Modèle"
                                           variant="outlined"></v-text-field>
                         </v-col>
                     </v-row>
                     <v-row class="ma-2">
-                        <v-col>
+                        <v-col cols="12" sm="12">
                             <v-text-field @update:model-value="onYearInput" label="Année"
                                           variant="outlined"></v-text-field>
-                        </v-col>
-                        <v-col>
+                        </v-col >
+                        <v-col cols="12" sm="12">
                             <v-text-field @update:model-value="onPlateInput" label="Immatriculation"
                                           variant="outlined"></v-text-field>
                         </v-col>
@@ -223,7 +224,7 @@ const deleteVehicle = async() => {
 
                 </v-container>
                 <template v-slot:actions>
-                    <v-row v-if="!isLoading">
+                    <v-row v-if="!isLoading" class="">
                         <v-spacer></v-spacer>
                         <v-spacer></v-spacer>
                         <v-spacer></v-spacer>

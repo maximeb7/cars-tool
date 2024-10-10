@@ -34,6 +34,7 @@ class EditUserVehicle extends Controller
 
         $vehicle = $this->carRepository->getCarById($id);
 
+
         if ($vehicle->userId !== $user->id) {
             throw new \Exception('You do not have the right to delete this vehicle', 403);
         }
