@@ -5,7 +5,7 @@
                 v-model="drawer"
                 :rail="rail"
                 permanent
-                class="bg-grey-darken-3"
+                class="bg-grey-darken-4"
                 rounded="sm"
                 @click="rail = false"
                 @update:rail="handleRailToggle"

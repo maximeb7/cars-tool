@@ -12,6 +12,7 @@ import getVehiclesBrands from "@/Services/Brands/getVehiclesBrands.js";
 import addVehicle from "@/Services/Vehicles/AddVehicle.js";
 import deleteUserVehicle from "@/Services/Vehicles/DeleteVehicle.js";
 import {router} from '@inertiajs/vue3';
+import VehiclesRegistrationCard from "@/Components/Vehicles/VehiclesRegistrationCard.vue";
 
 const noVehiclesMessage = ref("")
 const vehicles = ref([]);
@@ -177,6 +178,8 @@ const deleteVehicle = async() => {
                 </v-btn>
             </v-col>
         </v-row>
+
+        <vehicles-registration-card/>
 
 
         <v-dialog
