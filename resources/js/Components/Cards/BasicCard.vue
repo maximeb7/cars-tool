@@ -28,7 +28,7 @@ const props = defineProps({
 
         class="mx-auto h-100"
     >
-        <v-card-item :title="title">
+        <v-card-item :style="`color: ${color}`" :title="title">
 
         </v-card-item>
 

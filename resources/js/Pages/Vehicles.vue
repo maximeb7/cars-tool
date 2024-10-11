@@ -46,6 +46,7 @@ const fetchUserVehicles = async (userUuid) => {
     try {
         const data = await getUserVehicles(userUuid)
         vehicles.value = data;
+        console.log(data)
 
     } catch (e) {
         console.log("Erreur de recuperation des vehicules", e);
@@ -178,9 +179,6 @@ const deleteVehicle = async() => {
                 </v-btn>
             </v-col>
         </v-row>
-
-        <vehicles-registration-card/>
-
 
         <v-dialog
             v-model="addVehicleModal"
