@@ -2,10 +2,9 @@
 
 namespace App\Presenters\Dtos;
 
-use App\Domain\Entities\Brand;
-use Illuminate\Database\Eloquent\Collection;
+use App\Domain\Entities\RepairType;
 
-class BrandDto
+class RepairTypesDto
 {
     public $id;
     public $name;
@@ -19,11 +18,11 @@ class BrandDto
         $this->name = $name;
     }
 
-    public static function fromEntity(Brand $brand): self
+    public static function fromEntity(RepairType $repairType): self
     {
         return new self(
-            $brand->id,
-            $brand->name
+            $repairType->id,
+            $repairType->name
         );
     }
 }

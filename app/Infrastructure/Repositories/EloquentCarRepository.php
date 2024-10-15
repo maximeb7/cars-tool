@@ -26,7 +26,8 @@ class EloquentCarRepository implements CarRepositoryInterface
                 $eloquentCar->year,
                 $eloquentCar->plate,
                 $eloquentCar->image_path,
-                $eloquentCar->kilometers
+                $eloquentCar->kilometers,
+                $eloquentCar->getFullName()
             );
         }
 

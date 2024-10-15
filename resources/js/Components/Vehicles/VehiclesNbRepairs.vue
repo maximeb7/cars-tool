@@ -47,7 +47,6 @@ const limit = ref(15);
 <style scoped>
 .vehicle_details_title {
     font-weight: bolder;
-    background-color: #eaeaea;;
 }
 .vehicle-name {
     font-weight: bolder;

@@ -13,6 +13,7 @@ class Car
     public ?string $plate;
     public ?string $imagePath;
     public ?string $kilometers;
+    public ?string $fullName;
     public array $repairs = [];
 
     public function __construct(
@@ -24,7 +25,8 @@ class Car
         int $year,
         ?string $plate,
         ?string $imagePath,
-        ?string $kilometers
+        ?string $kilometers,
+        ?string $fullName,
     )
     {
         $this->id = $id;
@@ -36,6 +38,7 @@ class Car
         $this->plate = $plate;
         $this->imagePath = $imagePath;
         $this->kilometers = $kilometers;
+        $this->fullName = $fullName;
     }
 
     public function addRepair(Repair $repair)

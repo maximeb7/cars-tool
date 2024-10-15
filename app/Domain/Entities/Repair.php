@@ -4,7 +4,7 @@ namespace App\Domain\Entities;
 
 class Repair
 {
-    public int $id;
+    public ?int $id;
     public int $carId;
     public int $repairTypeId;
     public ?string $repairTypeName;
@@ -14,7 +14,7 @@ class Repair
     public bool $isPlannedRepair;
 
     public function __construct(
-        int $id,
+        ?int $id,
         int $carId,
         int $repairTypeId,
         ?string $repairTypeName,

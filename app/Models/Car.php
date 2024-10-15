@@ -47,6 +47,11 @@ class Car extends Model
         return $this->brand->name;
     }
 
+    public function getFullName(): ?string
+    {
+        return $this->getBrandName(). ' '. $this->model;
+    }
+
     protected function repairs(): HasMany
     {
         return $this->hasMany(Repair::class);
