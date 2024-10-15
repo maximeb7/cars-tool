@@ -8,6 +8,7 @@ const props = defineProps({
 
 const panel = ref([]);
 const readonly = ref(false)
+const limit = ref(15);
 
 </script>
 
@@ -21,7 +22,7 @@ const readonly = ref(false)
             <v-expansion-panel>
                 <v-expansion-panel-title class="vehicle_details_title">Détail par véhicule</v-expansion-panel-title>
                 <v-expansion-panel-text>
-                <v-row v-for="vehicle in data" key="vehicle">
+                <v-row v-for="vehicle in data.slice(0, limit)" key="vehicle">
 
                         <v-row class="ma-1 ">
                             <v-col cols="12" sm="4" class="vehicle-name">
