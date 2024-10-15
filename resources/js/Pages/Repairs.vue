@@ -4,6 +4,7 @@ import {Head} from "@inertiajs/vue3";
 import {onMounted, ref} from "vue";
 import VehiclesNbRepairs from "@/Components/Vehicles/VehiclesNbRepairs.vue";
 import BasicCard from "@/Components/Cards/BasicCard.vue";
+import StatsMostExpensiveRepairsByVehicles from "@/Components/Repairs/StatsMostExpensiveRepairsByVehicles.vue";
 
 const noRepairsMessage = ref("")
 const repairsByVehicle = ref([]);
@@ -35,7 +36,6 @@ onMounted(async() => {
     formatRepairsData()
     formatVehicleSummary()
     mostExpensiveVehicle.value = getMostExpensiveVehicle()
-    console.log('Most expensive', mostExpensiveVehicle)
 
 })
 
@@ -74,7 +74,9 @@ const formatVehicleSummary = () => {
             nbRepairs: vehicle.repairs.length,
             totalRepairCost: totalRepairCost.toFixed(2),
         };
-    });
+    })
+        .sort((a, b) => b.totalRepairCost - a.totalRepairCost)
+        .slice(0, 15);
 };
 
 </script>
@@ -104,6 +106,10 @@ const formatVehicleSummary = () => {
                     :value="mostExpensiveVehicle.totalCost"
                     value-type="€"
                 />
+            </v-col>
+            <v-col cols="12" sm="5">
+                <p class="most-exp-title mb-2">Total des dépenses par véhicules:</p>
+                <stats-most-expensive-repairs-by-vehicles :repairs-by-vehicle="repairsNbByVehicles" />
             </v-col>
         </v-row>
 

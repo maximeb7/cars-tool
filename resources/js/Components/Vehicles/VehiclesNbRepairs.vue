@@ -20,7 +20,7 @@ const limit = ref(15);
             multiple
         >
             <v-expansion-panel>
-                <v-expansion-panel-title class="vehicle_details_title">Détail par véhicule</v-expansion-panel-title>
+                <v-expansion-panel-title class="vehicle_details_title">Détails par véhicule</v-expansion-panel-title>
                 <v-expansion-panel-text>
                 <v-row v-for="vehicle in data.slice(0, limit)" key="vehicle">
 
