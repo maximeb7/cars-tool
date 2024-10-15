@@ -5,6 +5,7 @@ import {onMounted, ref} from "vue";
 import VehiclesNbRepairs from "@/Components/Vehicles/VehiclesNbRepairs.vue";
 import BasicCard from "@/Components/Cards/BasicCard.vue";
 import StatsMostExpensiveRepairsByVehicles from "@/Components/Repairs/StatsMostExpensiveRepairsByVehicles.vue";
+import deleteRepairById from "@/Services/Repairs/deleteRepair.js";
 
 const noRepairsMessage = ref("")
 const repairsByVehicle = ref([]);
@@ -22,6 +23,8 @@ const headers = ref([
 
 const formatedRepairs = ref([])
 const repairsNbByVehicles = ref([]);
+const deleteDialog = ref(false);
+const selectedRepair = ref(null);
 
 
 onMounted(async() => {
@@ -55,6 +58,7 @@ const getMostExpensiveVehicle = () => {
 const formatRepairsData = () => {
     formatedRepairs.value = repairsByVehicle.value.flatMap((vehicle) =>
         vehicle.repairs.map((repair) => ({
+            id: vehicle.id,
             brandName: vehicle.brandName,
             model: vehicle.model,
             plate: vehicle.plate,
@@ -78,6 +82,33 @@ const formatVehicleSummary = () => {
         .sort((a, b) => b.totalRepairCost - a.totalRepairCost)
         .slice(0, 15);
 };
+
+/** DELETE */
+
+const openDeleteDialog = (item) => {
+    selectedRepair.value = item;
+    deleteDialog.value = true
+}
+
+const closeDeleteDialog = () => {
+    deleteDialog.value = false;
+    selectedRepair.value = null;
+}
+
+const deleteRepair = async() => {
+    console.log(selectedRepair.value)
+    try {
+        await deleteRepairById(selectedRepair.value.id)
+        formatedRepairs.value = formatedRepairs.value.filter(
+            (repair) => repair.id !== selectedRepair.value.id
+        );
+
+        closeDeleteDialog();
+
+    }catch (error) {
+        console.log('Erreure lors de la suppression de l\'entretien', error);
+    }
+}
 
 </script>
 
@@ -138,22 +169,22 @@ const formatVehicleSummary = () => {
                     <v-btn icon @click.stop="" variant="text">
                         <v-icon color="#22da94" icon="mdi-square-edit-outline" size="large"></v-icon>
                     </v-btn>
-                    <v-btn icon @click.stop="" variant="text">
+                    <v-btn icon @click.stop="openDeleteDialog(item)" variant="text">
                         <v-icon color="#f2726f" icon="mdi-delete-outline" size="large"></v-icon>
                     </v-btn>
                 </template>
             </v-data-table>
             <!-- Popup de confirmation -->
-            <v-dialog max-width="800">
+            <v-dialog v-model="deleteDialog" max-width="800">
                 <v-card>
                     <v-card-title>Confirmer la suppression</v-card-title>
                     <v-card-text>
-                        Es-tu sûr de vouloir supprimer ce véhicule ?
+                        Es-tu sûr de vouloir supprimer cet entretien ?
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="green darken-1" text @click="closeDeleteDialog">Annuler</v-btn>
-                        <v-btn color="red darken-1" text @click="deleteVehicle">Confirmer</v-btn>
+                        <v-btn color="red darken-1" text @click="deleteRepair">Confirmer</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\GetUserWithCarsAndRepairs;
 use App\Http\Controllers\Vehicles\EditUserVehicle;
+use App\Http\Controllers\Repairs\UserDeleteVehicleRepair;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -26,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     //REPAIRS ENDPOINTS
 
     Route::get('/user-repairs/{uuid}', GetAllRepairs::class);
+    Route::delete('/user-repairs/{id}', UserDeleteVehicleRepair::class);
 
     //VEHICLES ENDPOINTS
 
