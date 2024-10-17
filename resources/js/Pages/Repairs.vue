@@ -194,7 +194,7 @@ const fetchUserInformations = async () => {
 
 const createRepair = async(params) => {
     try {
-        const data = await addRepair(params)
+        await addRepair(params)
         isLoading.value = false;
         addRepairModal.value= false;
         await fetchUserInformations();
@@ -234,7 +234,6 @@ const createRepair = async(params) => {
             transition="dialog-top-transition"
             width="900"
             class="mb-10"
-            style=""
         >
             <v-card
                 max-width="1000"
@@ -281,7 +280,8 @@ const createRepair = async(params) => {
                                 suffix="€"
                             ></v-text-field>
                         </v-col >
-                        <v-col cols="12" sm="4">
+                    </v-row>
+                    <v-row class="ma-2 justify-center">
                             <v-date-picker
                                 @update:model-value="onDateInput"
                                 width="300"
@@ -293,7 +293,6 @@ const createRepair = async(params) => {
                                 :rules="dateRules"
                             >
                             </v-date-picker>
-                        </v-col>
                     </v-row>
                 </v-container>
                 <template v-slot:actions>
