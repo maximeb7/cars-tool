@@ -23,7 +23,6 @@ const headers = ref([
     {key: 'date', title: "Date"},
     { text: 'Actions', value: 'actions', sortable: false }
 ]);
-
 const formatedRepairs = ref([])
 const repairsNbByVehicles = ref([]);
 const deleteDialog = ref(false);
@@ -67,7 +66,6 @@ onMounted(async() => {
     }
 
     await getRepairsTypes();
-
 })
 
 const getRepairsTypes = async() => {
