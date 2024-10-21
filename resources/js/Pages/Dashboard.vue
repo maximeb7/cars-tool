@@ -28,14 +28,14 @@ import BasicCard from "@/Components/Cards/BasicCard.vue";
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale,PointElement,LineElement,Title)
 
-const userInformations = ref(null);
+const userInformations = ref(null)
 const carsAndRepairs = ref([])
 const repairs = ref([])
-const repairsTotalAmount = ref(0);
-const stats = ref([])
+const repairsTotalAmount = ref(0)
+const stats = ref({})
 const allByMonthForStats = ref(null)
 const allTypesForStats = ref(null)
-const carsTotal = ref(0);
+const carsTotal = ref(0)
 const repairsTotal = ref(0)
 const doughnutDataLabels = ref({
     labels: ['Pneus', 'Révision', 'Vidange', 'Freinage'],
@@ -70,7 +70,9 @@ const lineDataOptions = ref({
         maintainAspectRatio: false
     }
 )
-
+const isLoadingUserInfo = ref(true)
+const isLoadingRepairs = ref(true)
+const isLoadingStats = ref(true)
 
 onMounted(async () => {
     localStorage.setItem('userId', props.auth.user.id);
@@ -103,45 +105,51 @@ onMounted(async () => {
 });
 
 const fetchUserInformations = async (userUuid) => {
+    isLoadingUserInfo.value = true
     try {
-        const data = await getUserInformations(userUuid);
-        userInformations.value = data;
+        const data = await getUserInformations(userUuid)
+        userInformations.value = data
 
         if (data.cars.length > 0) {
-            carsAndRepairs.value = data.cars;
-            carsTotal.value = data.cars.length;
+            carsAndRepairs.value = data.cars
+            carsTotal.value = data.cars.length
         }
 
-        localStorage.setItem("userInfos", JSON.stringify(data));
+        localStorage.setItem("userInfos", JSON.stringify(data))
     } catch (error) {
-        console.error("Erreur lors de la récupération des informations de l'utilisateur", error);
+        console.error("Erreur lors de la récupération des informations de l'utilisateur", error)
+    } finally {
+        isLoadingUserInfo.value = false
     }
-};
+}
 
 const fetchUserRepairs = async (userUuid) => {
+    isLoadingRepairs.value = true
     try {
-        const data = await getUserRepairs(userUuid);
+        const data = await getUserRepairs(userUuid)
         const price = data.reduce((accumulator, repair) => accumulator + repair.price, 0)
-        repairsTotalAmount.value = price.toFixed(1);
-        repairs.value = data;
+        repairsTotalAmount.value = price.toFixed(1)
+        repairs.value = data
         repairsTotal.value = data.length
     } catch (error) {
-        console.error("Erreur lors de la récupération des réparations de l'utilisateur", error);
+        console.error("Erreur lors de la récupération des réparations de l'utilisateur", error)
+    } finally {
+        isLoadingRepairs.value = false
     }
 }
 
 const fetchUserGlobalsStats = async (userUuid) => {
+    isLoadingStats.value = true
     try {
-        const data = await getUserRepairsGlobalStats(userUuid);
-        stats.value = data;
-
-        allTypesForStats.value = stats.value.allTypesForStats
-        allByMonthForStats.value = stats.value.allByMonthForStats
-
-
-        localStorage.setItem("globalStats", JSON.stringify(data));
+        const data = await getUserRepairsGlobalStats(userUuid)
+        stats.value = data
+        allTypesForStats.value = data.allTypesForStats
+        allByMonthForStats.value = data.allByMonthForStats
+        localStorage.setItem("globalStats", JSON.stringify(data))
     } catch (error) {
-        console.error("Erreur lors de la récupération des réparations de l'utilisateur", error);
+        console.error("Erreur lors de la récupération des statistiques de l'utilisateur", error)
+    } finally {
+        isLoadingStats.value = false
     }
 }
 
@@ -167,36 +175,15 @@ const fetchUserGlobalsStats = async (userUuid) => {
         </v-card>
 
         <!-- Stats part-->
-        <v-row class="ma-4 mb-8">
-            <v-col v-if="allTypesForStats" cols="12" sm="6">
-                <p class="mb-2">Types de dépenses</p>
-                <v-card class="py-3">
-                    <Doughnut :data="allTypesForStats" :options="doughnutDataOptions"/>
-                </v-card>
-            </v-col>
-            <v-col v-else cols="12" sm="6">
-                <v-progress-circular
-                    :size="70"
-                    :width="7"
-                    color="green"
-                    indeterminate
-                ></v-progress-circular>
-            </v-col>
-            <v-col v-if="allByMonthForStats" cols="12" sm="6" class="max-h-30">
-                <p class="mb-2">Dépenses sur l'année</p>
-                <v-card class="py-3">
-                    <Line :size="70" :data="allByMonthForStats" :options="lineDataOptions"/>
-                </v-card>
-            </v-col>
-            <v-col v-else cols="12" sm="6">
-                <v-progress-circular
-                    :size="70"
-                    :width="7"
-                    color="purple"
-                    indeterminate
-                ></v-progress-circular>
-            </v-col>
-        </v-row>
+            <v-row class="ma-4 mb-8">
+                <v-col cols="12" sm="6">
+                    <p class="mb-2">Types de dépenses</p>
+                    <v-card class="py-3">
+                        <v-progress-circular v-if="isLoadingStats" indeterminate color="primary"></v-progress-circular>
+                        <Doughnut v-else :data="allTypesForStats" :options="doughnutDataOptions"/>
+                    </v-card>
+                </v-col>
+            </v-row>
 
         <v-row class="ma-4 mt-10 mb-13"  >
             <v-col cols="12" sm="4">

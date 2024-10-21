@@ -38,7 +38,7 @@ const submit = async () => {
         const response = await axios.post(route('login'), form.data());
 
         const token = response.data.token;
-        const uuid = response.data.uuid;
+        const uuid = response.data.user?.uuid;
         const redirectUrl = response.data.redirect_url;
         const userId = response.data.user?.id
         const userName = response.data.user?.name
