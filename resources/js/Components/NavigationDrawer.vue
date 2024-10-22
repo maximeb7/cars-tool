@@ -72,19 +72,19 @@ export default {
     methods: {
         toggleRail() {
             this.rail = !this.rail;
-            this.$emit('rail-toggled', this.rail); // Émettre l'événement
+            this.$emit('rail-toggled', this.rail);
         },
         handleRailToggle(rail) {
             this.rail = rail;
-            this.$emit('rail-toggled', this.rail); // Émettre l'événement
+            this.$emit('rail-toggled', this.rail);
         },
     },
 }
 </script>
 <style scoped>
 .inner-shadow {
-    position: relative; /* Nécessaire pour positionner l'ombre */
-    overflow: hidden; /* Cache le dépassement de l'ombre */
+    position: relative;
+    overflow: hidden;
 }
 
 .inner-shadow::before {
@@ -94,7 +94,7 @@ export default {
     left: 0;
     right: 0;
     bottom: 0;
-    box-shadow: inset 5px 0 10px -5px rgba(0, 0, 0, 0.2); /* Ombre interne */
+    box-shadow: inset 5px 0 10px -5px rgba(0, 0, 0, 0.2);
     pointer-events: none;
 }
 .tile:hover {
