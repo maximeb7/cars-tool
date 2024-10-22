@@ -204,7 +204,7 @@ const fetchUserGlobalsStats = async (userUuid) => {
             </v-col>
         </v-row>
         <!-- Stats part-->
-        <v-row class="ma-4 mb-8">
+        <v-row v-if="allTypesForStats" class="ma-4 mb-8">
             <v-col cols="12" sm="12">
                 <p class="mb-2">Types de dépenses</p>
                 <v-card class="py-3">

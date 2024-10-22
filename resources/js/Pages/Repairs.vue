@@ -332,8 +332,8 @@ const createRepair = async(params) => {
         </v-dialog>
 
 
-        <v-row  class="m-3 mt-4 ml-2 mb-15" v-if="mostExpensiveVehicle">
-            <v-col cols="10" sm="4" style="height: 15em">
+        <v-row  class="m-3 mt-4 ml-2 mb-15" >
+            <v-col cols="10" sm="4" style="height: 15em" v-if="mostExpensiveVehicle">
                 <p class="most-exp-title mb-2">Véhicule qui vous coûte le plus cher:</p>
                 <basic-card
                     color="#f2726f"
@@ -350,7 +350,7 @@ const createRepair = async(params) => {
         </v-row>
 
 
-        <v-card class="m-5 mt-5" elevation="1" border="rounded">
+        <v-card v-if="repairsNbByVehicles.length > 1" class="m-5 mt-5" elevation="1" border="rounded">
             <vehicles-nb-repairs :data="repairsNbByVehicles"/>
         </v-card>
 

@@ -46,8 +46,6 @@ const fetchUserVehicles = async (userUuid) => {
     try {
         const data = await getUserVehicles(userUuid)
         vehicles.value = data;
-        console.log(data)
-
     } catch (e) {
         console.log("Erreur de recuperation des vehicules", e);
     }
