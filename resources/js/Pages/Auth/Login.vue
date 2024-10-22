@@ -33,29 +33,23 @@ onMounted(() => {
         localStorage.setItem('authToken', token);
     }
 });
-const submit = async () => {
-    try {
-        const response = await axios.post(route('login'), form.data());
+const submit = () => {
+    form.post(route('login'), {
+        preserveScroll: true,
+        onSuccess: (response) => {
+            const token = response?.props?.auth?.user?.token;
+            const uuid = response?.props?.auth?.user?.uuid;
+            const userId = response?.props?.auth?.user?.id;
+            const userName = response?.props?.auth?.user?.name;
 
-        const token = response.data.token;
-        const uuid = response.data.user?.uuid;
-        const redirectUrl = response.data.redirect_url;
-        const userId = response.data.user?.id
-        const userName = response.data.user?.name
+            if (token) localStorage.setItem('authToken', token);
+            if (uuid) localStorage.setItem('userUuid', uuid);
+            if (userId) localStorage.setItem('userId', userId);
+            if (userName) localStorage.setItem('userName', userName);
 
-        localStorage.setItem('authToken', token);
-        localStorage.setItem('userId', userId);
-        localStorage.setItem('userUuid', uuid);
-        localStorage.setItem('userName', userName);
-
-        router.visit(redirectUrl, {
-            preserveScroll: false,
-            preserveState: false,
-            replace: true
-        });
-    } catch (error) {
-
-    }
+            // La redirection sera gérée automatiquement par Inertia
+        },
+    });
 };
 </script>
 

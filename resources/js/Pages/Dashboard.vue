@@ -1,8 +1,10 @@
 <script setup>
 
 const props = defineProps({
-    auth: Object
+    auth: Object,
+    authToken: String,
 });
+
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head, usePage} from '@inertiajs/vue3';
 import { onMounted, ref } from 'vue';
@@ -79,13 +81,9 @@ onMounted(async () => {
     localStorage.setItem('userUuid', props.auth.user.uuid);
     localStorage.setItem('userName', props.auth.user.name);
 
-
-
-
     if (!localStorage.getItem('authToken')) {
         const page = usePage();
-        const token = page.props.flash.authToken;
-
+        const token = page.props.flash?.authToken;
 
         if (token) {
             localStorage.setItem('authToken', token);

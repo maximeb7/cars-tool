@@ -33,24 +33,19 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        // Crée un token d'API
         $user = Auth::user();
         $token = $user->createToken('authToken')->plainTextToken;
-        $user->getRememberToken();
+        $request->session()->flash('authToken', $token);
 
-
-        // Vérifie si la requête est AJAX
         if ($request->wantsJson()) {
             return response()->json([
                 'token' => $token,
-                'redirect_url' => route('dashboard', [], false),
+                'redirect_url' => route('dashboard'),
                 'user' => $user,
             ]);
         }
 
-        return redirect()->intended(route('dashboard', ['token' => $token,
-            'redirect_url' => route('dashboard', [], false),
-            'user' => $user,], false));
+        return Inertia::location(route('dashboard'));
     }
 
     /**
