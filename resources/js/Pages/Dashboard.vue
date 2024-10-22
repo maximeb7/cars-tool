@@ -174,16 +174,7 @@ const fetchUserGlobalsStats = async (userUuid) => {
             </div>
         </v-card>
 
-        <!-- Stats part-->
-            <v-row class="ma-4 mb-8">
-                <v-col cols="12" sm="6">
-                    <p class="mb-2">Types de dépenses</p>
-                    <v-card class="py-3">
-                        <v-progress-circular v-if="isLoadingStats" indeterminate color="primary"></v-progress-circular>
-                        <Doughnut v-else :data="allTypesForStats" :options="doughnutDataOptions"/>
-                    </v-card>
-                </v-col>
-            </v-row>
+
 
         <v-row class="ma-4 mt-10 mb-13"  >
             <v-col cols="12" sm="4">
@@ -212,6 +203,16 @@ const fetchUserGlobalsStats = async (userUuid) => {
                     :value="repairsTotal"
                     value-type=""
                 />
+            </v-col>
+        </v-row>
+        <!-- Stats part-->
+        <v-row class="ma-4 mb-8">
+            <v-col cols="12" sm="12">
+                <p class="mb-2">Types de dépenses</p>
+                <v-card class="py-3">
+                    <v-progress-circular v-if="isLoadingStats" indeterminate color="primary"></v-progress-circular>
+                    <Doughnut v-else :data="allTypesForStats" :options="doughnutDataOptions"/>
+                </v-card>
             </v-col>
         </v-row>
 
