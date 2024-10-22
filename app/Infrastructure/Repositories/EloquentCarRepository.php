@@ -57,7 +57,8 @@ class EloquentCarRepository implements CarRepositoryInterface
             $eloquentCar->year,
             $eloquentCar->plate,
             $eloquentCar->imagePath,
-            $eloquentCar->kilometers
+            $eloquentCar->kilometers,
+            $eloquentCar->getFullName()
         );
     }
 

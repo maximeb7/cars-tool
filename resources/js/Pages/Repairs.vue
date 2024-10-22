@@ -50,6 +50,8 @@ onMounted(async() => {
         userVehicles.value = JSON.parse(localStorage.getItem('vehicles'))
     }
 
+    console.log('les reparations', formatedRepairs.value)
+
     await getRepairsTypes();
 })
 
@@ -102,6 +104,7 @@ const formatRepairsData = () => {
             plate: vehicle.plate,
             repairTypeName: repair.repairTypeName,
             price: repair.price,
+            repair_id: repair.id,
             date: repair.date.split(' ')[0],
         }))
     );
@@ -135,13 +138,15 @@ const closeDeleteDialog = () => {
 }
 
 const deleteRepair = async() => {
+    console.log(selectedRepair.value)
     try {
-        await deleteRepairById(selectedRepair.value.id)
+        await deleteRepairById(selectedRepair.value.repair_id)
         formatedRepairs.value = formatedRepairs.value.filter(
-            (repair) => repair.id !== selectedRepair.value.id
+            (repair) => repair.repair_id !== selectedRepair.value.repair_id
         );
-
         closeDeleteDialog();
+
+        await fetchUserInformations()
 
     }catch (error) {
         console.log('Erreure lors de la suppression de l\'entretien', error);
