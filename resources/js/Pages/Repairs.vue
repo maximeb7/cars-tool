@@ -9,10 +9,12 @@ import deleteRepairById from "@/Services/Repairs/deleteRepair.js";
 import getAllRepairTypes from "@/Services/RepairTypes/GetAllRepairTypes.js";
 import addRepair from "@/Services/Repairs/addRepair.js";
 import getUserInformations from "@/Services/User/getUserInformations.js";
+import NewRepairForm from "@/Components/Repairs/NewRepairForm.vue";
 
 const noRepairsMessage = ref("")
 const repairsByVehicle = ref([]);
 const mostExpensiveVehicle = ref(null)
+const newRepairForm = ref(null);
 const headers = ref([
 
     {key: 'brandName', title: "Marque"},
@@ -31,23 +33,6 @@ const addRepairModal = ref(false);
 const userVehicles = ref([]);
 const newRepair = ref(new Object());
 const repairTypes = ref([])
-const priceRules = ref({
-    required: value => !!value || 'Champs requis',
-    numeric: value => !isNaN(parseFloat(value)) || 'Le champs doit être un nombre',
-});
-const isLoading = ref(false);
-
-const carIdRules = ref([
-    value => !!value || 'Champs requis'
-]);
-
-const repairTypeIdRules = ref([
-    value => !!value || 'Champs requis'
-]);
-
-const dateRules = ref([
-    value => !!value || 'Champs requis'
-]);
 
 onMounted(async() => {
     let userInfos = localStorage.getItem('userInfos');
@@ -68,6 +53,24 @@ onMounted(async() => {
     await getRepairsTypes();
 })
 
+const openNewRepairForm = () => {
+    if (newRepairForm.value) {
+        newRepairForm.value.showModal = true;
+    }
+};
+
+const closeNewRepairForm = () => {
+    if (newRepairForm.value) {
+        newRepairForm.value.showModal = false;
+    }
+};
+
+const handleRepairAdded = async () => {
+    await fetchUserInformations();
+    formatRepairsData();
+    formatVehicleSummary();
+    mostExpensiveVehicle.value = getMostExpensiveVehicle();
+};
 const getRepairsTypes = async() => {
     try {
         const data = await getAllRepairTypes()
@@ -145,42 +148,6 @@ const deleteRepair = async() => {
     }
 }
 
-const onVehicleIdSelected = (value) => {
-    newRepair.value.car_id = value;
-}
-
-const onRepairTypeIdSelected = (value) => {
-    newRepair.value.repair_type_id = value;
-}
-
-const onPriceInput = (value) => {
-    newRepair.value.price = value;
-}
-
-const onDateInput = (value) => {
-    newRepair.value.date = value;
-}
-
-const resetNewRepair = () => {
-    newRepair.value = new Object()
-    addRepairModal.value = false
-}
-
-const userAddRepair = async () => {
-    isLoading.value = true;
-    let formatedObject = formatRepairParams()
-    await createRepair(formatedObject);
-}
-
-const formatRepairParams = () => {
-    return {
-        car_id: parseInt(newRepair.value.car_id),
-        repair_type_id: parseInt(newRepair.value.repair_type_id),
-        price: parseFloat(newRepair.value.price),
-        date: newRepair.value.date,
-        is_planned_repair: 0
-    };
-}
 const fetchUserInformations = async () => {
     try {
         await getUserInformations(localStorage.getItem('userUuid'))
@@ -190,16 +157,6 @@ const fetchUserInformations = async () => {
     window.location.reload();
 }
 
-const createRepair = async(params) => {
-    try {
-        await addRepair(params)
-        isLoading.value = false;
-        addRepairModal.value= false;
-        await fetchUserInformations();
-    }catch (e) {
-        console.log('Erreure lors de la création de la réparation', e)
-    }
-}
 
 </script>
 
@@ -220,118 +177,19 @@ const createRepair = async(params) => {
 
         <v-row v-if="userVehicles" class="ma-2">
             <v-col>
-                <v-btn prepend-icon="mdi-plus-circle" color="#16de92" @click="addRepairModal = true" size="large"
+                <v-btn prepend-icon="mdi-plus-circle" color="#16de92" @click="openNewRepairForm" size="large"
                        variant="tonal">
                     Ajouter un entretien
                 </v-btn>
             </v-col>
         </v-row>
-
-        <v-dialog
-            v-model="addRepairModal"
-            transition="dialog-top-transition"
-            width="900"
-            class="mb-10"
-        >
-            <v-card
-                max-width="1000"
-                style="overflow: hidden ;"
-                prepend-icon="mdi-car-wrench"
-                text="Veuillez renseigner les information ci-dessous pour ajouter un nouvel entretien: "
-                title="Ajouter un entretien"
-            >
-                <v-container>
-                    <v-row class="ma-2">
-                        <v-col cols="12" sm="12">
-                            <v-autocomplete
-                                :items="userVehicles"
-                                item-title="fullName"
-                                item-value="id"
-                                label="Véhicule associé"
-                                clearable
-                                variant="outlined"
-                                :rules="carIdRules"
-                                @update:model-value="onVehicleIdSelected"
-                            ></v-autocomplete>
-                        </v-col>
-                        <v-col cols="12" sm="12">
-                        <v-autocomplete
-                            :items="repairTypes"
-                            item-title="name"
-                            item-value="id"
-                            label="Type de réparation"
-                            clearable
-                            variant="outlined"
-                            :rules="repairTypeIdRules"
-                            @update:model-value="onRepairTypeIdSelected"
-                        ></v-autocomplete>
-                        </v-col>
-                    </v-row>
-                    <v-row class="ma-2">
-                        <v-col cols="12" sm="12">
-                            <v-text-field
-                                @update:model-value="onPriceInput"
-                                label="Prix"
-                                type="number"
-                                :rules="[priceRules.required, priceRules.numeric]"
-                                variant="outlined"
-                                suffix="€"
-                            ></v-text-field>
-                        </v-col >
-                    </v-row>
-                    <v-row class="ma-2 justify-center">
-                            <v-date-picker
-                                @update:model-value="onDateInput"
-                                width="300"
-                                height="450"
-                                header="Date de l'entretien"
-                                elevation="1"
-                                title="Veuillez sélectionner une date"
-                                :color="'rgba(153,255,195,0.55)'"
-                                :rules="dateRules"
-                            >
-                            </v-date-picker>
-                    </v-row>
-                </v-container>
-                <template v-slot:actions>
-                    <v-row v-if="!isLoading" class="">
-                        <v-spacer></v-spacer>
-                        <v-spacer></v-spacer>
-                        <v-spacer></v-spacer>
-                        <v-spacer></v-spacer>
-                        <v-col class="text-right">
-                            <v-btn
-                                class="ms-auto"
-                                text="Annuler"
-                                variant="tonal"
-                                color="grey"
-                                size="large"
-                                @click="resetNewRepair"
-                            ></v-btn>
-                        </v-col>
-                        <v-col class="text-left">
-                            <v-btn
-                                class="ms-auto pr-3 pl-3"
-                                size="large"
-                                text="Ajouter"
-                                color="#16de92"
-                                variant="tonal"
-                                @click="userAddRepair"
-                            ></v-btn>
-                        </v-col>
-                    </v-row>
-                    <v-row v-else>
-                        <v-progress-circular
-                            color="green"
-                            indeterminate
-                        ></v-progress-circular>
-                    </v-row>
-
-                </template>
-            </v-card>
-        </v-dialog>
-
-
+        <NewRepairForm
+            ref="newRepairForm"
+            :user-vehicles="userVehicles"
+            :repair-types="repairTypes"
+            @close="closeNewRepairForm"
+            @repair-added="handleRepairAdded"
+        />
         <v-row  class="m-3 mt-4 ml-2 mb-15" >
             <v-col cols="10" sm="4" style="height: 15em" v-if="mostExpensiveVehicle">
                 <p class="most-exp-title mb-2">Véhicule qui vous coûte le plus cher:</p>
@@ -353,9 +211,6 @@ const createRepair = async(params) => {
         <v-card v-if="repairsNbByVehicles.length > 1" class="m-5 mt-5" elevation="1" border="rounded">
             <vehicles-nb-repairs :data="repairsNbByVehicles"/>
         </v-card>
-
-
-
 
         <v-card v-if="repairsByVehicle" class="m-5 mt-5" elevation="1" border="rounded">
 
