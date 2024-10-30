@@ -96,6 +96,10 @@ export default {
     bottom: 0;
     box-shadow: inset 5px 0 10px -5px rgba(0, 0, 0, 0.2);
     pointer-events: none;
+
+    background-color: #d9ffea;
+    border-right: 1px solid #ddd;
+
 }
 .tile:hover {
     background: #bcffe6;
