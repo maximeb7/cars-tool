@@ -22,6 +22,12 @@ Route::get('/repairs', function () {
     return Inertia::render('Repairs');
 })->middleware(['auth', 'verified'])->name('repairs');
 
+Route::get('/repair-details', function (\Illuminate\Http\Request $request) {
+    return Inertia::render('RepairDetails', [
+        'repair' => $request->repair
+    ]);
+})->middleware(['auth', 'verified'])->name('repair-details');
+
 Route::get('/vehicles', function () {
     return Inertia::render('Vehicles');
 })->middleware(['auth', 'verified'])->name('vehicles');

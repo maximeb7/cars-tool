@@ -47,11 +47,12 @@ const limit = ref(15);
 <style scoped>
 .vehicle_details_title {
     font-weight: bolder;
+    color: #6200EE;
 }
 .vehicle-name {
     font-weight: bolder;
-    color: #1eb37a;
-}
+    color: #a682d9;
+}<
 .nb-repairs {
     color: black;
 }

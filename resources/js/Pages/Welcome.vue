@@ -51,6 +51,7 @@ function handleImageError() {
                         <Link
                             v-if="$page.props.auth.user"
                             :href="route('dashboard')"
+                            style="color: #6200EE!important"
                             class="rounded-md px-3 py-2 text-teal-accent-4 ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                         >
                             Go To my Dashboard
@@ -59,6 +60,7 @@ function handleImageError() {
                         <template v-else>
                             <Link
                                 :href="route('login')"
+                                style="color: #6200EE!important"
                                 class="rounded-md px-3 py-2 text-teal-accent-4 ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                             >
                                 Log in
@@ -67,6 +69,7 @@ function handleImageError() {
                             <Link
                                 v-if="canRegister"
                                 :href="route('register')"
+                                style="color: #6200EE!important"
                                 class="rounded-md px-3 py-2 text-teal-accent-4 ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                             >
                                 Register
@@ -78,10 +81,10 @@ function handleImageError() {
                 <main class="mt-6">
 
                             <div class="d-flex flex-column fill-height justify-center align-center text-black">
-                                <v-avatar color="#23e89c" :size="300">
+                                <v-avatar color="#6200EE" :size="300">
                                     <v-icon color="white" :size="220" icon="mdi-car-multiple"></v-icon>
                                 </v-avatar>
-                                <h1 class="text-h1 font-weight-thin mb-4">
+                                <h1 class="text-h1 font-weight-thin mb-4" style="color: #6200EE">
                                     CarTool
                                 </h1>
                                 <h4 class="subheading">

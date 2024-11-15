@@ -177,7 +177,7 @@ const fetchUserGlobalsStats = async (userUuid) => {
         <v-row class="ma-4 mt-10 mb-13"  >
             <v-col cols="12" sm="4">
                 <basic-card
-                    color="#22da94"
+                    color="#6200EE"
                     icon="mdi-cash-register"
                     title="Total des dépenses"
                     :value="repairsTotalAmount"
@@ -186,7 +186,7 @@ const fetchUserGlobalsStats = async (userUuid) => {
             </v-col>
             <v-col cols="12" sm="4">
                 <basic-card
-                    color="#22da94"
+                    color="#6200EE"
                     icon="mdi-car-outline"
                     title="Nombre de véhicules"
                     :value="carsTotal"
@@ -195,7 +195,7 @@ const fetchUserGlobalsStats = async (userUuid) => {
             </v-col>
             <v-col cols="12" sm="4">
                 <basic-card
-                    color="#22da94"
+                    color="#6200EE"
                     icon="mdi-tools"
                     title="Nombre d'entretiens réalisés"
                     :value="repairsTotal"

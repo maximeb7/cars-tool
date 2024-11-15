@@ -162,7 +162,7 @@ const deleteVehicle = async() => {
             <div class="max-w-10xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-62text-gray-900 d-flex">
-                        <v-icon color="#22da94" icon="mdi-car-search-outline" size="x-large"></v-icon>
+                        <v-icon color="#6200EE" icon="mdi-car-search-outline" size="x-large"></v-icon>
                         <p class="title">Mes véhicules</p>
                     </div>
                 </div>
@@ -171,7 +171,7 @@ const deleteVehicle = async() => {
 
         <v-row class="ma-2">
             <v-col>
-                <v-btn prepend-icon="mdi-plus-circle" color="#16de92" @click="addVehicleModal = true" size="large"
+                <v-btn prepend-icon="mdi-plus-circle" color="#6200EE" @click="addVehicleModal = true" size="large"
                        variant="tonal">
                     Ajouter un véhicule
                 </v-btn>
@@ -256,7 +256,7 @@ const deleteVehicle = async() => {
                                 class="ms-auto pr-3 pl-3"
                                 size="large"
                                 text="Ajouter"
-                                color="#16de92"
+                                color="#6200EE"
                                 variant="tonal"
                                 @click="userAddVehicle"
                             ></v-btn>
@@ -316,7 +316,7 @@ const deleteVehicle = async() => {
 
 <style scoped>
 .title {
-    color: #22da94;
+    color: #6200EE;
     font-size: 20px;
     margin-left: 10px;
 }

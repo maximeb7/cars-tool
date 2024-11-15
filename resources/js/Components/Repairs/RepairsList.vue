@@ -15,8 +15,8 @@ const headers = ref([
 
 <template>
     <v-card class="m-5 mt-5" elevation="1" border="rounded">
-        <h1 class="repairs-title"><v-icon color="#22da94" icon="mdi-tools"></v-icon> Entretiens</h1>
-        <v-data-table color="green" :items="props.repairs" :headers="headers">
+        <h1 class="repairs-title"><v-icon color="#6200EE" icon="mdi-tools"></v-icon> Entretiens</h1>
+        <v-data-table color="#6200EE" :items="props.repairs" :headers="headers">
             <template v-slot:item.price="{ item }">
                 <span class="font-weight-bold">{{ item.price }}</span>
             </template>
@@ -28,6 +28,6 @@ const headers = ref([
 .repairs-title {
     font-size: 23px;
     padding: 12px;
-    color: #22da94;
+    color: #6200EE;
 }
 </style>

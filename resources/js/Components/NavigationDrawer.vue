@@ -15,7 +15,7 @@
                     nav
                 >
                     <div class="d-flex justify-space-around align-center" >
-                        <v-avatar color="#23e89c" size="large">
+                        <v-avatar color="#6200EE" size="large">
                             <v-icon color="white" icon="mdi-car-multiple"></v-icon>
                         </v-avatar>
                         <h1>CAR TOOL</h1>
@@ -24,7 +24,7 @@
                     <template v-slot:append>
                         <v-btn
                             icon="mdi-chevron-left"
-                            color="#23e89c"
+                            color="#6200EE"
                             variant="text"
                             @click.stop="toggleRail"
                         ></v-btn>
@@ -34,7 +34,7 @@
                 <v-divider></v-divider>
 
                 <v-list  nav>
-                    <v-list-item class="tile" color="#22da94" prepend-icon="mdi-home" title="Home" value="home" :href="route('dashboard')"></v-list-item>
+                    <v-list-item class="tile" color="#6200EE" prepend-icon="mdi-home" title="Home" value="home" :href="route('dashboard')"></v-list-item>
                     <v-list-item class="tile" color="#22da94" prepend-icon="mdi-car-multiple" title="Mes véhicules" value="vehicles" :href="route('vehicles')">
                     </v-list-item>
                     <v-list-item class="tile" color="#22da94" prepend-icon="mdi-car-wrench" title="Maintenances" value="maintenance" :href="route('repairs')">
@@ -97,14 +97,14 @@ export default {
     box-shadow: inset 5px 0 10px -5px rgba(0, 0, 0, 0.2);
     pointer-events: none;
 
-    background-color: #d9ffea;
+    background: linear-gradient(-90deg, #ffffff, rgba(248, 244, 255, 0.42));
     border-right: 1px solid #ddd;
 
 }
 .tile:hover {
-    background: #bcffe6;
+    background: rgba(221, 198, 255, 0.51);
 }
 .tile:active {
-    background: #03ffa3;
+    background: #6200EE;
 }
 </style>

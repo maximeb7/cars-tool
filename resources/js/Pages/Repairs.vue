@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import {Head} from "@inertiajs/vue3";
+import {Head, router} from "@inertiajs/vue3";
 import {onMounted, ref} from "vue";
 import VehiclesNbRepairs from "@/Components/Vehicles/VehiclesNbRepairs.vue";
 import BasicCard from "@/Components/Cards/BasicCard.vue";
@@ -162,6 +162,13 @@ const fetchUserInformations = async () => {
     window.location.reload();
 }
 
+const getRepairDetails = (item) => {
+    router.visit(route('repair-details'), {
+        data: { repair: item },
+        method: 'get'
+    });
+}
+
 
 </script>
 
@@ -173,7 +180,7 @@ const fetchUserInformations = async () => {
             <div class="max-w-10xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-62text-gray-900 d-flex">
-                        <v-icon color="#22da94" icon="mdi-car-wrench" size="x-large"></v-icon>
+                        <v-icon color="#6200EE" icon="mdi-car-wrench" size="x-large"></v-icon>
                         <p class="title">Maintenances et entretiens</p>
                     </div>
                 </div>
@@ -182,7 +189,7 @@ const fetchUserInformations = async () => {
 
         <v-row v-if="userVehicles" class="ma-2">
             <v-col>
-                <v-btn prepend-icon="mdi-plus-circle" color="#16de92" @click="openNewRepairForm" size="large"
+                <v-btn prepend-icon="mdi-plus-circle" color="#6200EE" @click="openNewRepairForm" size="large"
                        variant="tonal">
                     Ajouter un entretien
                 </v-btn>
@@ -220,7 +227,7 @@ const fetchUserInformations = async () => {
         <v-card v-if="repairsByVehicle" class="m-5 mt-5" elevation="1" border="rounded">
 
             <div class="ml-3 mt-5 p-62 text-gray-900 d-flex">
-                <v-icon color="#22da94" icon="mdi-hammer-wrench" size="x-large"></v-icon>
+                <v-icon color="#6200EE" icon="mdi-hammer-wrench" size="x-large"></v-icon>
                 <p class="title">Entretiens effectués</p>
             </div>
             <v-data-table
@@ -231,7 +238,7 @@ const fetchUserInformations = async () => {
 
 
                 <template v-slot:item.actions="{ item }">
-                    <v-btn icon @click.stop="" variant="text">
+                    <v-btn icon @click.stop="getRepairDetails(item)" variant="text">
                         <v-icon color="#22da94" icon="mdi-square-edit-outline" size="large"></v-icon>
                     </v-btn>
                     <v-btn icon @click.stop="openDeleteDialog(item)" variant="text">
@@ -266,12 +273,13 @@ const fetchUserInformations = async () => {
 
 <style scoped>
 .title{
-    color: #22da94;
+    color: #6200EE;
     font-size: 20px;
     margin-left: 10px;
 }
 .most-exp-title {
     margin-left: 2px;
     font-weight: bold;
+    color: #6200EE;
 }
 </style>
