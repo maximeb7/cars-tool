@@ -2,6 +2,7 @@
 
 namespace App\Domain\Repositories;
 
+use App\Application\Queries\Repairs\UserEditVehicleRepairQuery;
 use App\Domain\Entities\Repair;
 use App\Models\Repair as EloquentRepair;
 use Illuminate\Database\Eloquent\Collection;
@@ -19,4 +20,6 @@ interface RepairRepositoryInterface
     public function getRepairEloquentModelById(int $repairId): ?\App\Models\Repair;
 
     public function createRepair(Repair $repair): EloquentRepair;
+
+    public function updateRepair(UserEditVehicleRepairQuery $query): EloquentRepair;
 }

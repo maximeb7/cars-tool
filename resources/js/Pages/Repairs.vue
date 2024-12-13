@@ -50,8 +50,6 @@ onMounted(async() => {
         userVehicles.value = JSON.parse(localStorage.getItem('vehicles'))
     }
 
-    console.log('les reparations', formatedRepairs.value)
-
     await getRepairsTypes();
 })
 
@@ -103,6 +101,7 @@ const formatRepairsData = () => {
             model: vehicle.model,
             plate: vehicle.plate,
             repairTypeName: repair.repairTypeName,
+            repair_type_id: repair.repairTypeId,
             price: repair.price,
             repair_id: repair.id,
             date: repair.date.split(' ')[0],
@@ -138,7 +137,6 @@ const closeDeleteDialog = () => {
 }
 
 const deleteRepair = async() => {
-    console.log(selectedRepair.value)
     try {
         await deleteRepairById(selectedRepair.value.repair_id)
         formatedRepairs.value = formatedRepairs.value.filter(

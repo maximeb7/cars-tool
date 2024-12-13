@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Repositories;
 
+use App\Application\Queries\Repairs\UserEditVehicleRepairQuery;
 use App\Domain\Entities\Repair;
 use App\Domain\Repositories\RepairRepositoryInterface;
 use App\Models\Repair as EloquentRepair;
@@ -104,5 +105,19 @@ class EloquentRepairRepository implements RepairRepositoryInterface
             \Log::error('Erreur lors de la création de la réparation: ' . $e->getMessage());
             throw new \Exception('Impossible de créer votre entretien. Veuillez réessayer.');
         }
+    }
+
+    public function updateRepair(UserEditVehicleRepairQuery $query): EloquentRepair
+    {
+        $eloquentRepair = EloquentRepair::find($query->id);
+
+        $eloquentRepair->car_id = $query->carId;
+        $eloquentRepair->repair_type_id = $query->repairTypeId;
+        $eloquentRepair->price = $query->price;
+        $eloquentRepair->date = $query->date;
+        $eloquentRepair->is_planned_repair = $query->isPlannedRepair;
+        $eloquentRepair->save();
+
+        return $eloquentRepair;
     }
 }

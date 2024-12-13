@@ -2,8 +2,6 @@
 
 namespace App\Application\Queries\Vehicles;
 
-namespace App\Application\Queries\Vehicles;
-
 use Illuminate\Http\UploadedFile;
 
 class EditUserVehicleQuery

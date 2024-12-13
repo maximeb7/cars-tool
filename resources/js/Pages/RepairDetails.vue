@@ -2,17 +2,17 @@
 import { Head } from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {computed, onMounted, ref} from "vue";
-import getVehiclesBrands from "@/Services/Brands/getVehiclesBrands.js";
-import editVehicle from "@/Services/Vehicles/EditVehicle.js";
+import editRepair from "@/Services/Repairs/editRepair.js";
 import { router } from "@inertiajs/vue3";
 import getAllRepairTypes from "@/Services/RepairTypes/GetAllRepairTypes.js";
+import {useDate} from "vuetify";
 
 
 const repairDetails = ref(null)
-const brands = ref([]);
 const isLoading = ref(false);
 const repairTypes = ref([]);
 const modifyRepairDate = ref(false)
+const updateSuccessDialog = ref(false);
 
 const props = defineProps({
     repair: {
@@ -27,16 +27,10 @@ const dateRules = ref([
 
 onMounted(async() => {
     repairDetails.value = props.repair;
-    console.log('Repair details', repairDetails.value)
 
     await getRepairsTypes()
 });
 
-const imageSrc = computed(() => {
-    return repairDetails.value && repairDetails.value.imagePath
-        ? `${import.meta.env.VITE_APP_API_URL}/storage/${repairDetails.value.imagePath}`
-        : null;
-});
 
 const getRepairsTypes = async() => {
     try {
@@ -51,25 +45,19 @@ const changeRepairDate = () => {
     modifyRepairDate.value =!modifyRepairDate.value;
 }
 
-
-const fetchVehiclesBrands = async () => {
-    try {
-        const data = await getVehiclesBrands()
-        brands.value = data
-    } catch (e) {
-        console.log("Erreur des marques", e);
-    }
-
-}
-
-
 const onRepairTypeSelected = (value) => {
-    repairDetails.value.repair_id = value;
+    repairDetails.value.repair_type_id = value;
 }
 
 
 const onDateInput = (value) => {
-    repairDetails.value.date = value;
+    const date = new Date(value);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0'); // Récupère le jour et le formate
+
+    const formattedDate = `${year}-${month}-${day}`;
+    repairDetails.value.date = formattedDate;
 }
 
 
@@ -80,38 +68,31 @@ const onPriceInput = (value) => {
 const userEditRepair = async () => {
     isLoading.value = true;
     let formatedObject = formatRepairParams()
-    await putEditVehicle(formatedObject);
+    await putEditRepair(formatedObject);
 }
 
-const putEditVehicle = async (params) => {
+const putEditRepair = async (params) => {
     try {
-        const vehicleId = repairDetails.value.id
-        const data = await editVehicle(vehicleId, params)
+        const repairId = repairDetails.value.id
+        await editRepair(repairId, params)
         isLoading.value = false;
+        updateSuccessDialog.value = true;
     } catch (e) {
         console.log("Erreure lors de la mise à jour du véhicule", e);
     }
 
 }
 const formatRepairParams = () => {
-    let formData = new FormData();
-    formData.append('_method', 'PUT');
-    formData.append('car_id', parseInt(repairDetails.value.id));
-    formData.append('brand_id', repairDetails.value.brandId);
-    formData.append('model', repairDetails.value.model);
-    formData.append('plate', repairDetails.value.plate);
-    formData.append('year', repairDetails.value.year);
-    formData.append('id', repairDetails.value.id);
-    formData.append('kilometers', repairDetails.value.kilometers);
 
-    if (repairDetails.value.image_path instanceof File) {
-        formData.append('image_path', repairDetails.value.image_path);
-    } else if (typeof repairDetails.value.imagePath === 'string') {
-        formData.append('image_path', repairDetails.value.imagePath);
-    }
-    console.log(formData)
+    let params = new Object();
+    params.car_id = parseInt(repairDetails.value.id)
+    params.id = parseInt(repairDetails.value.repair_id)
+    params.is_planned_repair = false
+    params.repair_type_id = parseInt(repairDetails.value.repair_type_id)
+    params.price = parseFloat(repairDetails.value.price).toFixed(2)
+    params.date = repairDetails.value.date
 
-    return formData;
+    return params;
 };
 const goBack = () => {
     if (window.history.length > 2) {
@@ -128,6 +109,27 @@ const goBack = () => {
 <template>
     <Head title="Vehicle Details"></Head>
     <AuthenticatedLayout>
+
+        <v-dialog
+            v-model="updateSuccessDialog"
+            width="auto"
+        >
+            <v-card
+                max-width="400"
+                prepend-icon="mdi-update"
+                text="votre entretien a été mis à jour ! "
+                title="Mise à jour effectuée avec succès"
+            >
+                <template v-slot:actions>
+                    <v-btn
+                        class="ms-auto"
+                        text="Ok"
+                        @click="updateSuccessDialog = false"
+                    ></v-btn>
+                </template>
+            </v-card>
+        </v-dialog>
+
         <v-card class="py-5">
             <div class="max-w-10xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -154,7 +156,7 @@ const goBack = () => {
             <v-container>
 
 
-                <v-row class="ma-2">
+                <v-row class="ma-2" v-if="!isLoading">
                     <v-col cols="12" sm="12">
                         <v-autocomplete
                             :items="repairTypes"
@@ -168,7 +170,7 @@ const goBack = () => {
                         ></v-autocomplete>
                     </v-col>
                     <v-col cols="12" sm="12">
-                        <v-text-field @update:model-value="onPriceInput"  :model-value="props.repair.price" label="Price"
+                        <v-text-field @update:model-value="onPriceInput"  :model-value="props.repair.price" type="float" label="Price"
                                       variant="outlined"></v-text-field>
                     </v-col>
                     <v-col cols="6" sm="6">
@@ -182,7 +184,7 @@ const goBack = () => {
                         </v-btn>
                     </v-col>
                 </v-row>
-                <v-row v-if="modifyRepairDate" class="ma-2 justify-center">
+                <v-row v-if="modifyRepairDate && !isLoading" class="ma-2 justify-center">
                     <v-date-picker
                         @update:model-value="onDateInput"
                         width="300"
@@ -195,6 +197,11 @@ const goBack = () => {
                     >
                     </v-date-picker>
                 </v-row>
+                <v-row v-if="isLoading" class="ma-2 justify-center">
+                    <v-progress-circular indeterminate :size="82" color="blue-lighten-3" :width="6"></v-progress-circular>
+                </v-row>
+
+
 
 
 

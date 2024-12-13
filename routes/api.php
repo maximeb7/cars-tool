@@ -3,6 +3,7 @@
 use App\Http\Controllers\Brands\GetAllBrands;
 use App\Http\Controllers\Repairs\GetAllRepairs;
 use App\Http\Controllers\Repairs\UserCreateRepair;
+use App\Http\Controllers\Repairs\UserEditVehicleRepair;
 use App\Http\Controllers\RepairTypes\GetRepairTypes;
 use App\Http\Controllers\Vehicles\CreateUserVehicle;
 use App\Http\Controllers\Vehicles\DeleteUserVehicle;
@@ -30,6 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/user-repairs', UserCreateRepair::class);
     Route::get('/user-repairs/{uuid}', GetAllRepairs::class);
     Route::delete('/user-repairs/{id}', UserDeleteVehicleRepair::class);
+    Route::put('/user-repairs/{id}', UserEditVehicleRepair::class);
 
     //VEHICLES ENDPOINTS
 
