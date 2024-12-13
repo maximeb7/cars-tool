@@ -39,16 +39,6 @@ const allByMonthForStats = ref(null)
 const allTypesForStats = ref(null)
 const carsTotal = ref(0)
 const repairsTotal = ref(0)
-const doughnutDataLabels = ref({
-    labels: ['Pneus', 'Révision', 'Vidange', 'Freinage'],
-    datasets: [
-        {
-            label: "€",
-            backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
-            data: [40, 20, 80, 10]
-        }
-    ]
-})
 
 const doughnutDataOptions = ref({
         responsive: true,
@@ -56,22 +46,6 @@ const doughnutDataOptions = ref({
     }
 )
 
-const lineDataLabels = ref({
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-    datasets: [
-        {
-            label: 'Data One',
-            backgroundColor: '#f87979',
-            data: [40, 39, 10, 40, 39, 80, 40]
-        }
-    ]
-})
-
-const lineDataOptions = ref({
-        responsive: true,
-        maintainAspectRatio: false
-    }
-)
 const isLoadingUserInfo = ref(true)
 const isLoadingRepairs = ref(true)
 const isLoadingStats = ref(true)
@@ -175,7 +149,7 @@ const fetchUserGlobalsStats = async (userUuid) => {
 
 
         <v-row class="ma-4 mt-10 mb-13"  >
-            <v-col cols="12" sm="4">
+            <v-col cols="8" sm="4">
                 <basic-card
                     color="#6200EE"
                     icon="mdi-cash-register"
@@ -184,7 +158,7 @@ const fetchUserGlobalsStats = async (userUuid) => {
                     value-type="€"
                 />
             </v-col>
-            <v-col cols="12" sm="4">
+            <v-col cols="8" sm="4">
                 <basic-card
                     color="#6200EE"
                     icon="mdi-car-outline"
@@ -193,7 +167,7 @@ const fetchUserGlobalsStats = async (userUuid) => {
                     value-type=""
                 />
             </v-col>
-            <v-col cols="12" sm="4">
+            <v-col cols="8" sm="4">
                 <basic-card
                     color="#6200EE"
                     icon="mdi-tools"
@@ -205,7 +179,7 @@ const fetchUserGlobalsStats = async (userUuid) => {
         </v-row>
         <!-- Stats part-->
         <v-row v-if="allTypesForStats" class="ma-4 mb-8">
-            <v-col cols="12" sm="12">
+            <v-col cols="8" sm="12">
                 <p class="mb-2">Types de dépenses</p>
                 <v-card class="py-3">
                     <v-progress-circular v-if="isLoadingStats" indeterminate color="primary"></v-progress-circular>
@@ -214,8 +188,16 @@ const fetchUserGlobalsStats = async (userUuid) => {
             </v-col>
         </v-row>
 
-        <cars-list :cars-and-repairs="carsAndRepairs"/>
-        <RepairsList :repairs="repairs"/>
+        <v-row class="ma-4 mb-8">
+            <v-col cols="8" sm="12">
+                <cars-list :cars-and-repairs="carsAndRepairs"/>
+            </v-col>
+            <v-col cols="8" sm="12">
+                <RepairsList :repairs="repairs"/>
+            </v-col>
+        </v-row>
+
+
 
     </AuthenticatedLayout>
 </template>

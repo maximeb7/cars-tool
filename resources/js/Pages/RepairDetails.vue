@@ -115,10 +115,11 @@ const goBack = () => {
             width="auto"
         >
             <v-card
-                max-width="400"
-                prepend-icon="mdi-update"
+                max-width="600"
+                style="color: #6200EE"
+                prepend-icon="mdi-check-circle-outline"
                 text="votre entretien a été mis à jour ! "
-                title="Mise à jour effectuée avec succès"
+                title="Entretien mis à jour"
             >
                 <template v-slot:actions>
                     <v-btn

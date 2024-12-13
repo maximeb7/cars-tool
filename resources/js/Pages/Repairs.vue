@@ -29,18 +29,18 @@ const formatedRepairs = ref([])
 const repairsNbByVehicles = ref([]);
 const deleteDialog = ref(false);
 const selectedRepair = ref(null);
-const addRepairModal = ref(false);
 const userVehicles = ref([]);
-const newRepair = ref(new Object());
 const repairTypes = ref([])
 
 onMounted(async() => {
-    let userInfos = localStorage.getItem('userInfos');
+    const userUuid = localStorage.getItem('userUuid');
+    const data = await getUserInformations(userUuid)
+    localStorage.setItem("userInfos", JSON.stringify(data))
+    let userInfos = data;
 
     if (!userInfos) {
         noRepairsMessage.value = "Aucune maintenances à afficher"
     } else {
-        userInfos = JSON.parse(userInfos)
         repairsByVehicle.value = userInfos.cars;
     }
     formatRepairsData()
