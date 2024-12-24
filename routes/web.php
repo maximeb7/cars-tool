@@ -38,6 +38,11 @@ Route::get('/vehicle-details', function (\Illuminate\Http\Request $request) {
     ]);
 })->middleware(['auth', 'verified'])->name('vehicle-details');
 
+
+Route::get('/costs', function() {
+    return Inertia::render('Costs');
+})->middleware(['auth', 'verified'])->name('costs');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

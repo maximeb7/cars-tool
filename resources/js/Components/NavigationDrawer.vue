@@ -39,7 +39,7 @@
                     </v-list-item>
                     <v-list-item class="tile" color="#6200EE" prepend-icon="mdi-car-wrench" title="Maintenances" value="maintenance" :href="route('repairs')">
                     </v-list-item>
-                    <v-list-item class="tile" color="#6200EE" prepend-icon="mdi-cash-100" title="Dépenses" value="costs">
+                    <v-list-item class="tile" color="#6200EE" prepend-icon="mdi-cash-100" title="Dépenses" value="costs" :href="route('costs')">
                     </v-list-item>
 
 
